@@ -1,6 +1,6 @@
 #ifndef SRC_S21_STRING_H_
 #define SRC_S21_STRING_H_
-#define NULL 0
+#define S21_NULL 0
 typedef long unsigned s21_size_t;
 
 // 1. Searches for the first occurrence of the character c (an unsigned char) 
