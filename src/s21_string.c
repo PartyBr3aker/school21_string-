@@ -10,7 +10,7 @@ s21_size_t s21_strlen(const char *str) {
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
     int compare = 0;
     // Посимвольное сравнение с досрочным выходом, если есть отличие
-    for (int i = 0; i < n && compare == 0; i++) {
+    for (s21_size_t i = 0; i < n && compare == 0; i++) {
         compare = *((char*)str1 + i) - *((char*)str2 + i);
     }
     return compare;
@@ -43,4 +43,15 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
         n--;
     }
     return out;
+}
+
+// 17. Searches for the last occurrence of the character c (an unsigned char) in the string pointed to by the argument str.
+char *s21_strrchr(const char *str, int c) {
+    const char *out = s21_NULL;
+    do {
+        if (*str == c) {
+            out = str;
+        }
+    } while (*str++);
+    return (char *) out;
 }
