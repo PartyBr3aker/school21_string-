@@ -1,6 +1,6 @@
 #ifndef SRC_S21_STRING_H_
 #define SRC_S21_STRING_H_
-#define s21_NULL 0
+#define S21_NULL 0
 typedef long unsigned s21_size_t;
 
 // 1. Searches for the first occurrence of the character c (an unsigned char) 
@@ -69,7 +69,7 @@ char *s21_strstr(const char *haystack, const char *needle);
 // 20. Breaks string str into a series of tokens separated by delim.
 char *s21_strtok(char *str, const char *delim);
 
-void *to_upper(const char *str);
-void *to_lower(const char *str);
+void *s21_to_upper(const char *str);
+void *s21_to_lower(const char *str);
 
 #endif // SRC_S21_STRING_H_

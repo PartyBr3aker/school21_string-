@@ -47,7 +47,7 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
 
 // 17. Searches for the last occurrence of the character c (an unsigned char) in the string pointed to by the argument str.
 char *s21_strrchr(const char *str, int c) {
-    const char *out = s21_NULL;
+    const char *out = S21_NULL;
     do {
         if (*str == c) {
             out = str;
