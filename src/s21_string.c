@@ -3,7 +3,7 @@
 s21_size_t s21_strlen(const char *str) {
     s21_size_t len = 0;
     for(; str[len]; len++);
-    return len + 1;
+    return len;
 } 
 
 // 2. Compares the first n bytes of str1 and str2
@@ -20,7 +20,7 @@ int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
     char *out = dest;
     // Перестановка указателя в конец строки dest
-    dest = dest + s21_strlen(dest) - 1;
+    dest = dest + s21_strlen(dest);
     // Доп. условие выхода при досрочном окончании строки src
     while (n > 0 && *src != 0) {
         *dest = *src;
