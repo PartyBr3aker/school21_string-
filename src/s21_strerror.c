@@ -13,7 +13,7 @@ int GetNumberLenght(int number) {
 }
 
 void ErrorToString(int errnum) {
-    const static int start_index = 15;
+    const int start_index = 15;
     int errnum_length = GetNumberLenght(errnum);
     int i = start_index + errnum_length - 1;
     int negative_flag = errnum < 0;
@@ -34,17 +34,11 @@ void ErrorToString(int errnum) {
 
 char *s21_strerror(int errnum) {
     char* result;
-    if (errnum >= 0 && errnum <= 106) {
+    if (errnum >= 0 && errnum <= MAX_ERROR) {
         result = _errors[errnum];
     } else {
         ErrorToString(errnum);
         result = unknown_error;
     }
     return result;
-}
-
-int main() {
-    for (int i = -12; i < 200; ++i )
-    printf("%s\n", s21_strerror(i));
-    return 0;
 }

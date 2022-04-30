@@ -4,7 +4,7 @@ char *s21_strstr(const char *haystack, const char *needle) {
     s21_size_t haystack_lenght = s21_strlen(haystack);
     s21_size_t needle_lenght = s21_strlen(needle);
     const char* result = S21_NULL;
-    
+
     if (haystack_lenght < needle_lenght) {
         result = S21_NULL;
     } else if (haystack_lenght == needle_lenght && !s21_strcmp(haystack, needle)) {
