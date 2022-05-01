@@ -1,5 +1,4 @@
 #include "s21_string.h"
-#include <stdio.h>
 
 int GetNumberLenght(int number) {
     int result = 0;
