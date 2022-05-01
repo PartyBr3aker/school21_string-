@@ -80,6 +80,9 @@ char *s21_strstr(const char *haystack, const char *needle);
 // 20. Breaks string str into a series of tokens separated by delim.
 char *s21_strtok(char *str, const char *delim);
 
+void *s21_to_upper(const char *str);
+void *s21_to_lower(const char *str);
+
 #ifdef __APPLE__
 char* _errors[107] = {
     "Undefined error: 0",
