@@ -1,12 +1,42 @@
-all:test
-test:s21_string.a test.o 
-	gcc -Wall -Werror -Wextra string_test.o -o test.out -lcheck -lm -pthread -lrt -L. -ls21
-test.o:
-	gcc -Wall -Werror -Wextra -c string_test.c
-rebuild:clean test
+CC=gcc
+CFLAGS=-Wall -Werror -Wextra
+
+SRCS = ft_hooks.c \
+		ft_init_objects.c \
+		ft_init_objects2.c \
+		ft_objects_get_normal.c \
+		ft_objects_intersect.c \
+		ft_render.c \
+		ft_utils.c \
+		ft_utils2.c \
+		main.c \
+		ft_compute_light.c
+
+OBJS = $(SRCS:.c=.o)
+
+FLAGS = -Wall -Wextra -Werror
+NAME = s21_string
+
+
+all: $(NAME)
+
+%.o: %.c s21_string.h
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(NAME): $(OBJS)
+	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
+
+
 clean:
-	rm -rf *.o *.out *.a
+	rm -rf $(OBJS)
+
+test:
 s21_string.a:
-	gcc -c s21*.c
-	ar rc libs21.a s21*.o
-	ranlib libs21.a
+
+gcov_report:
+
+
+
+
+
+
