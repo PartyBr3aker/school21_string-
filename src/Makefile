@@ -11,6 +11,7 @@ SRCS =  s21_string/s21_memchr.c \
 		s21_string/s21_strcat.c \
 		s21_string/s21_strchr.c \
 		s21_string/s21_strcmp.c \
+		s21_string/s21_strncmp.c \
 		s21_string/s21_strcpy.c \
 		s21_string/s21_strcspn.c \
 		s21_string/s21_strerror.c \
@@ -28,8 +29,8 @@ REPORT_NAME = report
 
 all: s21_string.a gcov_report
 	make test
-%.o: %.c
-	$(CC) $(CFLAGS) $(CHECK_FLAGS) -c $< -o $@
+# %.o: %.c
+# $(CC) $(CFLAGS) $(CHECK_FLAGS) -c $< -o $@
 test: $(OBJS)
 	$(CC) $(CFLAGS) $(CHECK_FLAGS) $(OBJS) -o $(NAME)
 	make clean
@@ -39,9 +40,9 @@ clean_all:
 	rm -rf *.gcno
 	rm -rf *.gcda
 	rm -rf *.info
-	rm $(NAME)
 	rm -rf *.a
 	rm -rf $(REPORT_NAME)
+	rm $(NAME)
 clean:
 	rm -rf $(OBJS)
 	rm -rf *.o

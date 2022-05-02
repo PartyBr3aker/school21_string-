@@ -9,6 +9,8 @@ char *s21_strstr(const char *haystack, const char *needle) {
         result = S21_NULL;
     } else if (haystack_lenght == needle_lenght && !s21_strcmp(haystack, needle)) {
         result = haystack;
+    } else  if (needle_lenght == 0) {
+        result = haystack; 
     } else {
         for (s21_size_t i = 0; i < haystack_lenght - needle_lenght; ++i) {
             for (s21_size_t j = 0; j < needle_lenght && !result; ++j) {
