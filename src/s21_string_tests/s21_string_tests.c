@@ -34,6 +34,36 @@ START_TEST(s21_memchr_test_5) {
 }
 END_TEST
 
+// 2 функция. 1й тест
+START_TEST(s21_memcmp_test_1) {
+    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello ", 6), memcmp("Hello world\n\0", "Hello ", 6));
+}
+END_TEST
+
+// 2 функция. 2й тест
+START_TEST(s21_memcmp_test_2) {
+    ck_assert_int_eq(s21_memcmp("", "Hello ", 10), memcmp("", "Hello ", 10));
+}
+END_TEST
+
+// 2 функция. 3й тест
+START_TEST(s21_memcmp_test_3) {
+    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello world\n\0", 13), memcmp("Hello world\n\0", "Hello world\n\0", 13));
+}
+END_TEST
+
+// 2 функция. 4й тест
+START_TEST(s21_memcmp_test_4) {
+    ck_assert_int_eq(s21_memcmp("a\n\0", "a", 1), memcmp("a\n\0", "a", 1));
+}
+END_TEST
+
+// 2 функция. 5й тест
+START_TEST(s21_memcmp_test_5) {
+    ck_assert_int_eq(s21_memcmp("", "", 1), memcmp("", "", 1));
+}
+END_TEST
+
 // 6 функция. 1й тест
 START_TEST(s21_strcat_test_1) {
     char str[50] = "";
@@ -170,6 +200,25 @@ Suite *s21_memchr_suite(void) {
     return s;
 }
 
+// 2 функция. Набор тестов
+Suite *s21_memcmp_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("memcmp");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_memcmp_test_1);
+    tcase_add_test(tc_core, s21_memcmp_test_2);
+    tcase_add_test(tc_core, s21_memcmp_test_3);
+    tcase_add_test(tc_core, s21_memcmp_test_4);
+    tcase_add_test(tc_core, s21_memcmp_test_5);
+    
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
 // 6 функция. Набор тестов
 Suite *s21_strcat_suite(void) {
     Suite *s;
@@ -241,6 +290,7 @@ int s21_string_tests(Suite *s) {
 
 int main(void) {
     s21_string_tests(s21_memchr_suite());   // 1
+    s21_string_tests(s21_memcmp_suite());   // 2
     s21_string_tests(s21_strcat_suite());   // 6
     s21_string_tests(s21_strcpy_suite());   // 11
     s21_string_tests(s21_strpbrk_suite());  // 16
