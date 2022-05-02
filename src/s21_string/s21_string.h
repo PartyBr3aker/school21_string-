@@ -85,7 +85,7 @@ void *s21_to_lower(const char *str);
 
 #ifdef __APPLE__
 extern char* _errors[107];
-#define MAX_ERROR 106
+#define MAX_ERROR 107
 #endif  // __APPLE__
 
 #ifdef __unix__
