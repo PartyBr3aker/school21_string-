@@ -15,10 +15,11 @@ char *s21_strstr(const char *haystack, const char *needle) {
                 if (haystack[i + j] != needle[j]) {
                     result = S21_NULL;
                     break;
-                } else if (j == needle - 1) {
+                } else if (j == needle_lenght - 1) {
                     result = haystack + i;
+                }
             }
         }
     }
-    return result;
+    return (char*)result;
 }
