@@ -2,7 +2,7 @@
 #include <check.h>
 #include <string.h>
 
-#include "../s21_string/s21_string.h"
+#include "s21_string.h"
 // 1 функция. 1й тест
 START_TEST(s21_memchr_test_1) {
     ck_assert_pstr_eq(s21_memchr("qwerty", 'e', 5), memchr("qwerty", 'e', 5));
@@ -36,7 +36,8 @@ END_TEST
 
 // 2 функция. 1й тест
 START_TEST(s21_memcmp_test_1) {
-    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello ", 6), memcmp("Hello world\n\0", "Hello ", 6));
+    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello ", 6),
+                     memcmp("Hello world\n\0", "Hello ", 6));
 }
 END_TEST
 
@@ -48,7 +49,8 @@ END_TEST
 
 // 2 функция. 3й тест
 START_TEST(s21_memcmp_test_3) {
-    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello world\n\0", 13), memcmp("Hello world\n\0", "Hello world\n\0", 13));
+    ck_assert_int_eq(s21_memcmp("Hello world\n\0", "Hello world\n\0", 13),
+                     memcmp("Hello world\n\0", "Hello world\n\0", 13));
 }
 END_TEST
 
@@ -76,7 +78,8 @@ END_TEST
 START_TEST(s21_memcpy_test_2) {
     char str[30] = "Hello world\n\0";
     char str1[30] = "Hello world\n\0";
-    ck_assert_pstr_eq(s21_memcpy(str, "Hello world\0", 6), memcpy(str1, "Hello world\0", 6));
+    ck_assert_pstr_eq(s21_memcpy(str, "Hello world\0", 6),
+                      memcpy(str1, "Hello world\0", 6));
 }
 END_TEST
 
@@ -116,7 +119,8 @@ END_TEST
 START_TEST(s21_memmove_test_2) {
     char str[30] = "Hello world\n\0";
     char str1[30] = "Hello world\n\0";
-    ck_assert_pstr_eq(s21_memmove(str, "Hello world\0", 6), memmove(str1, "Hello world\0", 6));
+    ck_assert_pstr_eq(s21_memmove(str, "Hello world\0", 6),
+                      memmove(str1, "Hello world\0", 6));
 }
 END_TEST
 
@@ -144,35 +148,45 @@ START_TEST(s21_memmove_test_5) {
 }
 END_TEST
 
-// // 5 функция. 1й тест
-// START_TEST(s21_memset_test_1) {
-//     ck_assert_pstr_eq(s21_memset("qwerty", 'e', 5), memset("qwerty", 'e', 5));
-// }
-// END_TEST
+// 5 функция. 1й тест
+START_TEST(s21_memset_test_1) {
+    char str[30] = "qwerty";
+    char str1[30] = "qwerty";
+    ck_assert_pstr_eq(s21_memset(str, 'e', 5), memset(str1, 'e', 5));
+}
+END_TEST
 
-// // 5 функция. 2й тест
-// START_TEST(s21_memset_test_2) {
-//     ck_assert_pstr_eq(s21_memset("qwerty", 'e', 0), memset("qwerty", 'e', 0));
-// }
-// END_TEST
+// 5 функция. 2й тест
+START_TEST(s21_memset_test_2) {
+    char str[30] = "qwerty";
+    char str1[30] = "qwerty";
+    ck_assert_pstr_eq(s21_memset(str, 'e', 0), memset(str1, 'e', 0));
+}
+END_TEST
 
-// // 5 функция. 3й тест
-// START_TEST(s21_memset_test_3) {
-//     ck_assert_pstr_eq(s21_memset("Hello world\n\0", '\n', 7), memset("Hello world\n\0", '\n', 7));
-// }
-// END_TEST
+// 5 функция. 3й тест
+START_TEST(s21_memset_test_3) {
+    char str[30] = "Hello world\n\0";
+    char str1[30] = "Hello world\n\0";
+    ck_assert_pstr_eq(s21_memset(str, '\n', 7), memset(str1, '\n', 7));
+}
+END_TEST
 
-// // 5 функция. 4й тест
-// START_TEST(s21_memset_test_4) {
-//     ck_assert_pstr_eq(s21_memset("a\n\0", ' ', 5), memset("a\n\0", ' ', 2));
-// }
-// END_TEST
+// 5 функция. 4й тест
+START_TEST(s21_memset_test_4) {
+    char str[30] = "a\n\0";
+    char str1[30] = "a\n\0";
+    ck_assert_pstr_eq(s21_memset(str, ' ', 5), memset(str1, ' ', 5));
+}
+END_TEST
 
-// // 5 функция. 5й тест
-// START_TEST(s21_memset_test_5) {
-//     ck_assert_pstr_eq(s21_memset("\0", 'e', 1), memset("\0", 'e', 1));
-// }
-// END_TEST
+// 5 функция. 5й тест
+START_TEST(s21_memset_test_5) {
+    char str[30] = "\0";
+    char str1[30] = "\0";
+    ck_assert_pstr_eq(s21_memset(str, 'e', 1), memset(str1, 'e', 1));
+}
+END_TEST
 
 // 6 функция. 1й тест
 START_TEST(s21_strcat_test_1) {
@@ -228,7 +242,8 @@ END_TEST
 START_TEST(s21_strncat_test_2) {
     char str[50] = "";
     char str1[50] = "";
-    ck_assert_pstr_eq(s21_strncat(str, "Hello world\n\0", 12), strncat(str1, "Hello world\n\0", 12));
+    ck_assert_pstr_eq(s21_strncat(str, "Hello world\n\0", 12),
+                      strncat(str1, "Hello world\n\0", 12));
 }
 END_TEST
 
@@ -244,7 +259,8 @@ END_TEST
 START_TEST(s21_strncat_test_4) {
     char str[50] = "wsddqd";
     char str1[50] = "wsddqd";
-    ck_assert_pstr_eq(s21_strncat(str, "\n\n\0", 2), strncat(str1, "\n\n\0", 2));
+    ck_assert_pstr_eq(s21_strncat(str, "\n\n\0", 2),
+                      strncat(str1, "\n\n\0", 2));
 }
 END_TEST
 
@@ -258,7 +274,8 @@ END_TEST
 
 // 8 функция. 1й тест
 START_TEST(s21_strchr_test_1) {
-    ck_assert_pstr_eq(s21_strchr("Hello world\n", ' '), strchr("Hello world\n", ' '));
+    ck_assert_pstr_eq(s21_strchr("Hello world\n", ' '),
+                      strchr("Hello world\n", ' '));
 }
 END_TEST
 
@@ -276,7 +293,8 @@ END_TEST
 
 // 8 функция. 4й тест
 START_TEST(s21_strchr_test_4) {
-    ck_assert_pstr_eq(s21_strchr("Hello world\n", '\n'), strchr("Hello world\n", '\n'));
+    ck_assert_pstr_eq(s21_strchr("Hello world\n", '\n'),
+                      strchr("Hello world\n", '\n'));
 }
 END_TEST
 
@@ -288,7 +306,8 @@ END_TEST
 
 // 9 функция. 1й тест
 START_TEST(s21_strcmp_test_1) {
-    ck_assert_int_eq(s21_strcmp("Hello world\n\0", "Hello world\n\0"), strcmp("Hello world\n\0", "Hello world\n\0"));
+    ck_assert_int_eq(s21_strcmp("Hello world\n\0", "Hello world\n\0"),
+                     strcmp("Hello world\n\0", "Hello world\n\0"));
 }
 END_TEST
 
@@ -318,25 +337,29 @@ END_TEST
 
 // 10 функция. 1й тест
 START_TEST(s21_strncmp_test_1) {
-    ck_assert_int_eq(s21_strncmp("Hello world\n\0", "Hello world\n\0", 12), strncmp("Hello world\n\0", "Hello world\n\0", 12));
+    ck_assert_int_eq(s21_strncmp("Hello world\n\0", "Hello world\n\0", 12),
+                     strncmp("Hello world\n\0", "Hello world\n\0", 12));
 }
 END_TEST
 
 // 10 функция. 2й тест
 START_TEST(s21_strncmp_test_2) {
-    ck_assert_int_eq(s21_strncmp("a\n\0", "a\n\0", 2), strncmp("a\n\0", "a\n\0", 2));
+    ck_assert_int_eq(s21_strncmp("a\n\0", "a\n\0", 2),
+                     strncmp("a\n\0", "a\n\0", 2));
 }
 END_TEST
 
 // 10 функция. 3й тест
 START_TEST(s21_strncmp_test_3) {
-    ck_assert_int_eq(s21_strncmp(" \n\0", " \n\0", 2), strncmp(" \n\0", " \n\0", 2));
+    ck_assert_int_eq(s21_strncmp(" \n\0", " \n\0", 2),
+                     strncmp(" \n\0", " \n\0", 2));
 }
 END_TEST
 
 // 10 функция. 4й тест
 START_TEST(s21_strncmp_test_4) {
-    ck_assert_int_eq(s21_strncmp("\n\0", "\n\0", 1), strncmp("\n\0", "\n\0", 1));
+    ck_assert_int_eq(s21_strncmp("\n\0", "\n\0", 1),
+                     strncmp("\n\0", "\n\0", 1));
 }
 END_TEST
 
@@ -416,7 +439,8 @@ END_TEST
 START_TEST(s21_strncpy_test_4) {
     char str[50] = "Hel   lo";
     char str1[50] = "Hel   lo";
-    ck_assert_pstr_eq(s21_strncpy(str, "a\n\0", 10), strncpy(str1, "a\n\0", 10));
+    ck_assert_pstr_eq(s21_strncpy(str, "a\n\0", 10),
+                      strncpy(str1, "a\n\0", 10));
 }
 END_TEST
 
@@ -430,7 +454,8 @@ END_TEST
 
 // 13 функция. 1й тест
 START_TEST(s21_strcspn_test_1) {
-    ck_assert_int_eq(s21_strcspn("Hello world\n\0", "world\n\0"), strcspn("Hello world\n\0", "world\n\0"));
+    ck_assert_int_eq(s21_strcspn("Hello world\n\0", "world\n\0"),
+                     strcspn("Hello world\n\0", "world\n\0"));
 }
 END_TEST
 
@@ -527,7 +552,8 @@ END_TEST
 
 // 16 функция. 2й тест
 START_TEST(s21_strpbrk_test_2) {
-    ck_assert_pstr_eq(s21_strpbrk("Hello world\n\0", ""), strpbrk("Hello world\n\0", ""));
+    ck_assert_pstr_eq(s21_strpbrk("Hello world\n\0", ""),
+                      strpbrk("Hello world\n\0", ""));
 }
 END_TEST
 
@@ -554,21 +580,20 @@ END_TEST
 
 // 17 функция. 1й тест
 START_TEST(s21_strrchr_test_1) {
-    ck_assert_pstr_eq(s21_strrchr("qweeeer", 'e'),
-                      strrchr("qweeeer", 'e'));
+    ck_assert_pstr_eq(s21_strrchr("qweeeer", 'e'), strrchr("qweeeer", 'e'));
 }
 END_TEST
 
 // 17 функция. 2й тест
 START_TEST(s21_strrchr_test_2) {
-    ck_assert_pstr_eq(s21_strrchr("Hello world\n\0", 'o'), strrchr("Hello world\n\0", 'o'));
+    ck_assert_pstr_eq(s21_strrchr("Hello world\n\0", 'o'),
+                      strrchr("Hello world\n\0", 'o'));
 }
 END_TEST
 
 // 17 функция. 3й тест
 START_TEST(s21_strrchr_test_3) {
-    ck_assert_pstr_eq(s21_strrchr("\n\0", ' '),
-                      strrchr("\n\0", ' '));
+    ck_assert_pstr_eq(s21_strrchr("\n\0", ' '), strrchr("\n\0", ' '));
 }
 END_TEST
 
@@ -581,14 +606,14 @@ END_TEST
 
 // 17 функция. 5й тест
 START_TEST(s21_strrchr_test_5) {
-    ck_assert_pstr_eq(s21_strrchr(" q q q", 'q'),
-                      strrchr(" q q q", 'q'));
+    ck_assert_pstr_eq(s21_strrchr(" q q q", 'q'), strrchr(" q q q", 'q'));
 }
 END_TEST
 
 // 18 функция. 1й тест
 START_TEST(s21_strspn_test_1) {
-    ck_assert_int_eq(s21_strspn("Hello world\n\0", "Hello"), strspn("Hello world\n\0", "Hello"));
+    ck_assert_int_eq(s21_strspn("Hello world\n\0", "Hello"),
+                     strspn("Hello world\n\0", "Hello"));
 }
 END_TEST
 
@@ -624,7 +649,8 @@ END_TEST
 
 // 19 функция. 2й тест
 START_TEST(s21_strstr_test_2) {
-    ck_assert_pstr_eq(s21_strstr("asdqefvbqeb", "qe"), strstr("asdqefvbqeb", "qe"));
+    ck_assert_pstr_eq(s21_strstr("asdqefvbqeb", "qe"),
+                      strstr("asdqefvbqeb", "qe"));
 }
 END_TEST
 
@@ -636,13 +662,150 @@ END_TEST
 
 // 19 функция. 4й тест
 START_TEST(s21_strstr_test_4) {
-    ck_assert_pstr_eq(s21_strstr("aa\naa\n\0", "\n"), strstr("aa\naa\n\0", "\n"));
+    ck_assert_pstr_eq(s21_strstr("aa\naa\n\0", "\n"),
+                      strstr("aa\naa\n\0", "\n"));
 }
 END_TEST
 
 // 19 функция. 5й тест
 START_TEST(s21_strstr_test_5) {
     ck_assert_pstr_eq(s21_strstr("a\n\0", ""), strstr("a\n\0", ""));
+}
+END_TEST
+
+// 20 функция. 1й тест
+START_TEST(s21_strtok_test_1) {
+    char str[50] = "Hello world\n\0";
+    char str1[50] = "Hello world\n\0";
+    ck_assert_pstr_eq(s21_strtok(str, "\n\0"), strtok(str1, "\n\0"));
+}
+END_TEST
+
+// 20 функция. 2й тест
+START_TEST(s21_strtok_test_2) {
+    char str[50] = "a\n\0";
+    char str1[50] = "a\n\0";
+    ck_assert_pstr_eq(s21_strtok(str, "\n\0"), strtok(str1, "\n\0"));
+}
+END_TEST
+
+// 20 функция. 3й тест
+START_TEST(s21_strtok_test_3) {
+    char str[50] = "q w e r t y";
+    char str1[50] = "q w e r t y";
+    ck_assert_pstr_eq(s21_strtok(str, "123"), strtok(str1, "123"));
+}
+END_TEST
+
+// 20 функция. 4й тест
+START_TEST(s21_strtok_test_4) {
+    char str[50] = "\n\0";
+    char str1[50] = "\n\0";
+    ck_assert_pstr_eq(s21_strtok(str, ""), strtok(str1, ""));
+}
+END_TEST
+
+// 20 функция. 5й тест
+START_TEST(s21_strtok_test_5) {
+    char str[50] = "Hello world\n\0";
+    char str1[50] = "Hello world\n\0";
+    ck_assert_pstr_eq(s21_strtok(str, "\0"), strtok(str1, "\0"));
+}
+END_TEST
+
+// 21 функция to_upper. 1й тест
+START_TEST(s21_to_upper_test_1) {
+    ck_assert_pstr_eq(s21_to_upper("QwErTy"), "QWERTY");
+}
+END_TEST
+
+// 21 функция to_upper. 2й тест
+START_TEST(s21_to_upper_test_2) {
+    ck_assert_pstr_eq(s21_to_upper("Hello world\n\0"), "HELLO WORLD\n\0");
+}
+END_TEST
+
+// 21 функция to_upper. 3й тест
+START_TEST(s21_to_upper_test_3) {
+    ck_assert_pstr_eq(s21_to_upper("a\n\0"), "A\n\0");
+}
+END_TEST
+
+// 21 функция to_upper. 4й тест
+START_TEST(s21_to_upper_test_4) {
+    ck_assert_pstr_eq(s21_to_upper(" \n\0"), " \n\0");
+}
+END_TEST
+
+// 21 функция to_upper. 5й тест
+START_TEST(s21_to_upper_test_5) {
+    ck_assert_pstr_eq(s21_to_upper("\0"), "\0");
+}
+END_TEST
+
+// 22 функция to_lower. 1й тест
+START_TEST(s21_to_lower_test_1) {
+    ck_assert_pstr_eq(s21_to_lower("QwErTy"), "qwerty");
+}
+END_TEST
+
+// 22 функция to_lower. 2й тест
+START_TEST(s21_to_lower_test_2) {
+    ck_assert_pstr_eq(s21_to_lower("Hello world\n\0"), "hello world\n\0");
+}
+END_TEST
+
+// 22 функция to_lower. 3й тест
+START_TEST(s21_to_lower_test_3) {
+    ck_assert_pstr_eq(s21_to_lower("a\n\0"), "a\n\0");
+}
+END_TEST
+
+// 22 функция to_lower. 4й тест
+START_TEST(s21_to_lower_test_4) {
+    ck_assert_pstr_eq(s21_to_lower(" \n\0"), " \n\0");
+}
+END_TEST
+
+// 22 функция to_lower. 5й тест
+START_TEST(s21_to_lower_test_5) {
+    ck_assert_pstr_eq(s21_to_lower("\0"), "\0");
+}
+END_TEST
+
+// 23 функция insert. 1й тест
+START_TEST(s21_insert_test_1) {
+    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "He123llo");
+}
+END_TEST
+
+// 24 функция insert. 1й тест
+START_TEST(s21_trim_test_1) {
+    ck_assert_pstr_eq(s21_trim("123123123Hello123123123", "123"), "Hello");
+}
+END_TEST
+
+// 24 функция insert. 2й тест
+START_TEST(s21_trim_test_2) {
+    ck_assert_pstr_eq(s21_trim("Hello world\n\0", " "), "Hello world\n\0");
+}
+END_TEST
+
+// 24 функция insert. 3й тест
+START_TEST(s21_trim_test_3) {
+    ck_assert_pstr_eq(s21_trim("aa", "a"), S21_NULL);
+}
+END_TEST
+
+// 24 функция insert. 4й тест
+START_TEST(s21_trim_test_4) {
+    ck_assert_pstr_eq(s21_trim("a\n\0", "\n"), "a\0");
+}
+END_TEST
+
+// 24 функция insert. 5й тест
+START_TEST(s21_trim_test_5) {
+    ck_assert_pstr_eq(s21_trim(" a ", "1"), " a ");
 }
 END_TEST
 
@@ -678,7 +841,7 @@ Suite *s21_memcmp_suite(void) {
     tcase_add_test(tc_core, s21_memcmp_test_3);
     tcase_add_test(tc_core, s21_memcmp_test_4);
     tcase_add_test(tc_core, s21_memcmp_test_5);
-    
+
     suite_add_tcase(s, tc_core);
 
     return s;
@@ -697,7 +860,7 @@ Suite *s21_memcpy_suite(void) {
     tcase_add_test(tc_core, s21_memcpy_test_3);
     tcase_add_test(tc_core, s21_memcpy_test_4);
     tcase_add_test(tc_core, s21_memcpy_test_5);
-    
+
     suite_add_tcase(s, tc_core);
 
     return s;
@@ -716,30 +879,30 @@ Suite *s21_memmove_suite(void) {
     tcase_add_test(tc_core, s21_memmove_test_3);
     tcase_add_test(tc_core, s21_memmove_test_4);
     tcase_add_test(tc_core, s21_memmove_test_5);
-    
+
     suite_add_tcase(s, tc_core);
 
     return s;
 }
 
-// // 5 функция. Набор тестов
-// Suite *s21_memset_suite(void) {
-//     Suite *s;
-//     TCase *tc_core;
+// 5 функция. Набор тестов
+Suite *s21_memset_suite(void) {
+    Suite *s;
+    TCase *tc_core;
 
-//     s = suite_create("memset");
-//     tc_core = tcase_create("Core");
+    s = suite_create("memset");
+    tc_core = tcase_create("Core");
 
-//     tcase_add_test(tc_core, s21_memset_test_1);
-//     tcase_add_test(tc_core, s21_memset_test_2);
-//     tcase_add_test(tc_core, s21_memset_test_3);
-//     tcase_add_test(tc_core, s21_memset_test_4);
-//     tcase_add_test(tc_core, s21_memset_test_5);
-    
-//     suite_add_tcase(s, tc_core);
+    tcase_add_test(tc_core, s21_memset_test_1);
+    tcase_add_test(tc_core, s21_memset_test_2);
+    tcase_add_test(tc_core, s21_memset_test_3);
+    tcase_add_test(tc_core, s21_memset_test_4);
+    tcase_add_test(tc_core, s21_memset_test_5);
 
-//     return s;
-// }
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
 
 // 6 функция. Набор тестов
 Suite *s21_strcat_suite(void) {
@@ -1007,6 +1170,97 @@ Suite *s21_strstr_suite(void) {
     return s;
 }
 
+// 20 функция. Набор тестов
+Suite *s21_strtok_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("strtok");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_strtok_test_1);
+    tcase_add_test(tc_core, s21_strtok_test_2);
+    tcase_add_test(tc_core, s21_strtok_test_3);
+    tcase_add_test(tc_core, s21_strtok_test_4);
+    tcase_add_test(tc_core, s21_strtok_test_5);
+
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
+// 21 функция. Набор тестов
+Suite *s21_to_upper_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("to_upper");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_to_upper_test_1);
+    tcase_add_test(tc_core, s21_to_upper_test_2);
+    tcase_add_test(tc_core, s21_to_upper_test_3);
+    tcase_add_test(tc_core, s21_to_upper_test_4);
+    tcase_add_test(tc_core, s21_to_upper_test_5);
+
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
+// 22 функция. Набор тестов
+Suite *s21_to_lower_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("to_lower");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_to_lower_test_1);
+    tcase_add_test(tc_core, s21_to_lower_test_2);
+    tcase_add_test(tc_core, s21_to_lower_test_3);
+    tcase_add_test(tc_core, s21_to_lower_test_4);
+    tcase_add_test(tc_core, s21_to_lower_test_5);
+
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
+// 23 функция insert. Набор тестов
+Suite *s21_insert_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("insert");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_insert_test_1);
+
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
+// 24 функция trim. Набор тестов
+Suite *s21_trim_suite(void) {
+    Suite *s;
+    TCase *tc_core;
+
+    s = suite_create("trim");
+    tc_core = tcase_create("Core");
+
+    tcase_add_test(tc_core, s21_trim_test_1);
+    tcase_add_test(tc_core, s21_trim_test_2);
+    tcase_add_test(tc_core, s21_trim_test_3);
+    tcase_add_test(tc_core, s21_trim_test_4);
+    tcase_add_test(tc_core, s21_trim_test_5);
+
+    suite_add_tcase(s, tc_core);
+
+    return s;
+}
+
 int s21_string_tests(Suite *s) {
     int no_failed = 0;
     SRunner *runner;
@@ -1020,23 +1274,28 @@ int s21_string_tests(Suite *s) {
 }
 
 int main(void) {
-    s21_string_tests(s21_memchr_suite());   // 1
-    s21_string_tests(s21_memcmp_suite());   // 2
-    s21_string_tests(s21_memcpy_suite());   // 3
-    s21_string_tests(s21_memmove_suite());  // 4
-    // s21_string_tests(s21_memset_suite());   // 5
-    s21_string_tests(s21_strcat_suite());   // 6
-    s21_string_tests(s21_strncat_suite());  // 7
-    s21_string_tests(s21_strchr_suite());   // 8
-    s21_string_tests(s21_strcmp_suite());   // 9
-    s21_string_tests(s21_strncmp_suite());  // 10
-    s21_string_tests(s21_strcpy_suite());   // 11
-    s21_string_tests(s21_strncpy_suite());  // 12
-    s21_string_tests(s21_strcspn_suite());  // 13
-    s21_string_tests(s21_strerror_suite()); // 14
-    s21_string_tests(s21_strlen_suite());   // 15
-    s21_string_tests(s21_strpbrk_suite());  // 16
-    s21_string_tests(s21_strrchr_suite());  // 17
-    s21_string_tests(s21_strspn_suite());   // 18
-    s21_string_tests(s21_strstr_suite());   // 19
+    s21_string_tests(s21_memchr_suite());    // 1
+    s21_string_tests(s21_memcmp_suite());    // 2
+    s21_string_tests(s21_memcpy_suite());    // 3
+    s21_string_tests(s21_memmove_suite());   // 4
+    s21_string_tests(s21_memset_suite());    // 5
+    s21_string_tests(s21_strcat_suite());    // 6
+    s21_string_tests(s21_strncat_suite());   // 7
+    s21_string_tests(s21_strchr_suite());    // 8
+    s21_string_tests(s21_strcmp_suite());    // 9
+    s21_string_tests(s21_strncmp_suite());   // 10
+    s21_string_tests(s21_strcpy_suite());    // 11
+    s21_string_tests(s21_strncpy_suite());   // 12
+    s21_string_tests(s21_strcspn_suite());   // 13
+    s21_string_tests(s21_strerror_suite());  // 14
+    s21_string_tests(s21_strlen_suite());    // 15
+    s21_string_tests(s21_strpbrk_suite());   // 16
+    s21_string_tests(s21_strrchr_suite());   // 17
+    s21_string_tests(s21_strspn_suite());    // 18
+    s21_string_tests(s21_strstr_suite());    // 19
+    s21_string_tests(s21_strtok_suite());    // 20
+    s21_string_tests(s21_to_upper_suite());  // 21 upper
+    s21_string_tests(s21_to_lower_suite());  // 22 lower
+    s21_string_tests(s21_insert_suite());    // 23 insert
+    s21_string_tests(s21_trim_suite());      // 24 trim
 }
