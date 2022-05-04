@@ -2,7 +2,7 @@
 //#include "s21_string.h"
 
 int main() {
-    short i = 100000;
-    printf("%hd", i);
+    char i = '2';
+    printf("%lc fghj", L'а');
     return 0;
 }

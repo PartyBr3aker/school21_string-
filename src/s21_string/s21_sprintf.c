@@ -1,7 +1,6 @@
 #include "s21_string.h"
 #include <limits.h>
-
-// c - 
+#include <stdarg.h>
 
 // 1
 // c
@@ -34,6 +33,7 @@
 #define MINUS_FLAG 0b1
 #define PLUS_FLAG 0b10
 #define SPACE_FLAG 0b100
+
 #define H_LENGH_FLAG 0b1
 #define L_LENGH_FLAG 0b10
 #define L_CAPS_LENGH_FLAG 0b100
@@ -49,13 +49,16 @@ int GetSpecificatior(const char **format_pointer, SPECIFICATORS *specificator);
 int IsFlag(char c);
 int IsDigit(char c);
 int IsSpecificator(char c);
-int SpecificatorD(char **string_pointer, int number, int flags, int width, int precision, int length, SPECIFICATORS specificator);
-int SpecificatorF(char **string_pointer, double number, int flags, int width, int precision, int length, SPECIFICATORS specificator);
+int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix);
+int SpecificatorF(char **string_pointer, double number, int flags, int width, int precision);
 
 int sprintf(char *str, const char *format, ...) {
     int flags = 0, width = 0, precision = 0, length = 0;
     SPECIFICATORS specificator;
     int status = SUCCEED;
+    va_list argument_list;
+    va_start(argument_list, format);
+
     while (status == SUCCEED && *format) {
         if (*format != '%') {
             *str = *format++;
@@ -65,25 +68,26 @@ int sprintf(char *str, const char *format, ...) {
             switch (specificator)
             {
             case C:
-
                 break;
             case F:
-
                 break;
             case S:
-
                 break;
             case PERCENT:
-
+                *str = '%';
+                str++;
                 break;
             case I:
-
+                long long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case U:
-
+                unsigned long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case D:
-
+                long long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             default:
                 break;
@@ -137,7 +141,7 @@ int GetFlags(const char **format_pointer, int *flags) {
             status = ERROR;
         }
     }
-    *flags = status == SUCCEED ? _flags : *flags;
+    *flags = status == SUCCEED ? _flags : 0;
     *format_pointer = format;
     return status;
 }
@@ -180,6 +184,8 @@ int GetPrecision(const char **format_pointer, int *precision) {
             *format_pointer = format;
             *precision = (int)_precision;
         }
+    } else {
+        precision = 0;
     }
     return status;
 }
@@ -242,4 +248,18 @@ int IsDigit(char c) {
 
 int IsSpecificator(char c) {
     return c == 'c' || c == 'd' || c == 'i' || c == 'f' || c == 's' || c == 'u' || c == '%';
+}
+
+int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix) {
+    precision += precision ? 1 : 0;
+    s21_size_t length = GetNumberLength(number, radix) + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
+    width = (length >= width) ? length : width;
+    long long int number_abs = abs(number);
+    char* string = *string_pointer;
+    s21_memset(string, ' ', width);
+    char *end_of_number = flags & MINUS_FLAG ? string + length : string + width;
+
+    for (; end_of_number > string + w)
+
+
 }
