@@ -110,7 +110,6 @@ char* _errors[107] = {
     "Previous owner died",
     "Interface output queue is full"
 };
-#define MAX_ERROR 106
 #endif  // __APPLE__
 
 #ifdef __unix__
@@ -250,8 +249,8 @@ char* _errors[133] = {
     "Operation not possible due to RF-kill",
     "Memory page has hardware error"
 }
-#define MAX_ERROR 133
 #endif  // unix
+
 char unknown_error[150] = "Unknown error:    ";
 
 int GetNumberLenght(int number) {
