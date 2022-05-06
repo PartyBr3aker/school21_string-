@@ -1,8 +1,11 @@
 #include <stdio.h>
-//#include "s21_string.h"
+#include <stdlib.h>
+#include "s21_string.h"
 
 int main() {
-    char i = '2';
-    printf("%lc fghj", L'а');
+    int a = 0;
+    char* str = (char*)malloc(sizeof(char) * 150);
+    s21_sprintf(str, "1212 %d %d", 21, 23);
+    printf("%s", str);
     return 0;
 }

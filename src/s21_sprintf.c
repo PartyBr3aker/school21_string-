@@ -1,7 +1,9 @@
 #include "s21_string.h"
 #include <limits.h>
 #include <stdarg.h>
-
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 // 1
 // c
 // Символ
@@ -50,9 +52,10 @@ int IsFlag(char c);
 int IsDigit(char c);
 int IsSpecificator(char c);
 int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix);
-int SpecificatorF(char **string_pointer, double number, int flags, int width, int precision);
+int DoubleToString(char **string_pointer, double number, int flags, int width, int precision);
+int GetNumberLength(long long number, int radix);
 
-int sprintf(char *str, const char *format, ...) {
+int s21_sprintf(char *str, const char *format, ...) {
     int flags = 0, width = 0, precision = 0, length = 0;
     SPECIFICATORS specificator;
     int status = SUCCEED;
@@ -64,6 +67,7 @@ int sprintf(char *str, const char *format, ...) {
             *str = *format++;
             str++;
         } else {
+            format++;
             status = ParseSpecificator(&str, &format, &flags, &width, &precision, &length, &specificator);
             switch (specificator)
             {
@@ -78,22 +82,26 @@ int sprintf(char *str, const char *format, ...) {
                 str++;
                 break;
             case I:
-                long long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
-                IntToString(&str, (long long)number, flags, width, precision, 10);
+            ;
+                long long number_i = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number_i, flags, width, precision, 10);
                 break;
             case U:
-                unsigned long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
-                IntToString(&str, (long long)number, flags, width, precision, 10);
+            ;
+                unsigned long number_u = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
+                IntToString(&str, (long long)number_u, flags, width, precision, 10);
                 break;
             case D:
-                long long number = (width & H_LENGH_FLAG) ? va_arg(argument_list, short) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
-                IntToString(&str, (long long)number, flags, width, precision, 10);
+            ;
+                long long number_d = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number_d, flags, width, precision, 10);
                 break;
             default:
                 break;
             }
         }
     }
+    str = 0;
     return status;
 }
 
@@ -103,10 +111,10 @@ int ParseSpecificator(char **string_pointer, const char **format_pointer, int *f
     const char* format = *format_pointer;
 
     status = GetFlags(format_pointer, flags);
-    status = GetWidth(format_pointer, width);
-    status = GetPrecision(format_pointer, precision);
-    status = GetLength(format_pointer, length);
-    status = GetSpecificatior(format_pointer, specificator);
+    if (status == SUCCEED) status = GetWidth(format_pointer, width);
+    if (status == SUCCEED) status = GetPrecision(format_pointer, precision);
+    if (status == SUCCEED) status = GetLength(format_pointer, length);
+    if (status == SUCCEED) status = GetSpecificatior(format_pointer, specificator);
     return status;
 }
 
@@ -205,37 +213,38 @@ int GetLength(const char **format_pointer, int *length) {
 
     *length = status == SUCCEED ? _length : *length;
     *format_pointer = format;
+    return status;
 }
 
 int GetSpecificatior(const char **format_pointer, SPECIFICATORS *specificator) {
-    const char* format = *format_pointer;
+    char format = (*format_pointer)[0];
     SPECIFICATORS _specificator = 0;
     int status = SUCCEED;
 
-    if (IsSpecificator(*format)) {
-        if (*format == 'c') {
-            specificator = C;
-        } else if (*format == 'f') {
-            specificator == F;
-        } else if (*format == 's') {
-            specificator == S;
-        } else if (*format == '%') {
-            specificator == PERCENT;
-        } else if (*format == 'i') {
-            specificator == I;
-        } else if (*format == 'u') {
-            specificator == U;
-        } else if (*format == 'd') {
-            specificator == D;
+    if (IsSpecificator(format)) {
+        if (format == 'c') {
+            _specificator = C;
+        } else if (format == 'f') {
+            _specificator = F;
+        } else if (format == 's') {
+            _specificator = S;
+        } else if (format == '%') {
+            _specificator == PERCENT;
+        } else if (format == 'i') {
+            _specificator = I;
+        } else if (format == 'u') {
+            _specificator = U;
+        } else if (format == 'd') {
+            _specificator = D;
         } else {
             status = ERROR;
         }
-        format++;
     } else {
         status = ERROR;
     }
     *specificator = status == SUCCEED ? _specificator : *specificator;
-    *format_pointer = format;
+    *format_pointer += 1;
+    return status;
 }
 
 int IsFlag(char c) {
@@ -254,12 +263,39 @@ int IntToString(char **string_pointer, long long int number, int flags, int widt
     precision += precision ? 1 : 0;
     s21_size_t length = GetNumberLength(number, radix) + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
-    long long int number_abs = abs(number);
     char* string = *string_pointer;
     s21_memset(string, ' ', width);
-    char *end_of_number = flags & MINUS_FLAG ? string + length : string + width;
+    long long int abs_number = number >= 0 ? number : -number;
+    char *end_of_number = (flags & MINUS_FLAG) ? (string + length) : (string + width);
+    end_of_number--;
+    for (; end_of_number > string + width; end_of_number--) {
+        *end_of_number = '0';
+    }
 
-    for (; end_of_number > string + w)
+    if (precision > 0) {
+        *end_of_number = '.';
+        end_of_number--;
+    }
 
+    for (; abs_number > 0; abs_number /= 10, end_of_number--) {
+        *end_of_number = abs_number % 10 + '0';
+    }
 
+    if (flags & PLUS_FLAG) {
+        *end_of_number = number >= 0 ? '+' : '-';
+        end_of_number--;
+    } else if (flags & SPACE_FLAG) {
+        *end_of_number = number >= 0 ? ' ' : '-';
+        end_of_number--;
+    } else if (number < 0) {
+        *end_of_number = '-';
+        end_of_number--;
+    }
+
+    *string_pointer += width;
+    return SUCCEED;
+}
+
+int GetNumberLength(long long number, int radix) {
+    return (int)(log(number)/log(radix)) + 1;
 }
