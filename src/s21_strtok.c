@@ -19,17 +19,18 @@ char *s21_strtok(char *str, const char *delim) {
     }
     if (str) {  // clearing the beginning of a string
         int all_deligms = 0;
-        while (1) {
+        int regular = 0;
+        while (regular == 0) {
             if (is_delim(*str, delim)) {
                 str++;
-                continue;
-            }
-            if (*str == '\0') {
+            } else if (*str == '\0') {
                 all_deligms = 1;
+                regular = 1;
                 // we've reached the end of the string
                 // and no regular character was there
+            } else {
+                regular = 1; // we've found a regular character
             }
-            break;
         }
         if (!all_deligms) {  // if the string still contains smth
             result = str;
