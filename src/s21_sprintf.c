@@ -61,6 +61,8 @@ int s21_sprintf(char *str, const char *format, ...) {
     int status = SUCCEED;
     va_list argument_list;
     va_start(argument_list, format);
+    long long number;
+    double double_number;
 
     while (status == SUCCEED && *format) {
         if (*format != '%') {
@@ -74,6 +76,8 @@ int s21_sprintf(char *str, const char *format, ...) {
             case C:
                 break;
             case F:
+                double_number = (width & H_LENGH_FLAG) ? va_arg(argument_list, float) : (width & L_LENGH_FLAG) ? va_arg(argument_list, double) : va_arg(argument_list, float);
+                DoubleToString(string_pointer, double_number, flags, width, precision);
                 break;
             case S:
                 break;
@@ -83,18 +87,18 @@ int s21_sprintf(char *str, const char *format, ...) {
                 break;
             case I:
             ;
-                long long number_i = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
-                IntToString(&str, (long long)number_i, flags, width, precision, 10);
+                number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case U:
             ;
-                unsigned long number_u = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
-                IntToString(&str, (long long)number_u, flags, width, precision, 10);
+                number = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case D:
             ;
-                long long number_d = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
-                IntToString(&str, (long long)number_d, flags, width, precision, 10);
+                number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
+                IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             default:
                 break;
@@ -295,6 +299,60 @@ int IntToString(char **string_pointer, long long int number, int flags, int widt
     *string_pointer += width;
     return SUCCEED;
 }
+
+int DoubleToString(char **string_pointer, double number, int flags, int width, int precision) {
+    char* string = *string_pointer;
+    char temp = ' '; 
+    int i = precision; // i - Счетчик оставшихся знаков после запятой
+    int j = 0; // j - Позиция в выходной строке
+    long double abs_number = number >= 0 ? number : -number;
+    s21_size_t int_length = GetNumberLength(abs_number, 10); // Длина целой части
+    s21_size_t length = int_length + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) + (precision != 0);
+    width -= length;
+    // Округление числа
+    abs_number = abs_number * pow(10, precision);
+    abs_number = roundl(abs_number);
+    abs_number = abs_number / pow(10, precision);
+    // Преобразуем к нормированной строке вида X.ХХХХХХ
+    abs_number = abs_number / pow(10, int_length - 1);
+    i += int_length;
+    // Формирование строки
+    while (width > 0 && (flags & MINUS_FLAG) == 0) {
+        *string = ' ';
+        string++;
+        width--;
+    }
+    // Обработка флагов для записи первого символа
+    if (flags & PLUS_FLAG) {
+        *string = number >= 0 ? '+' : '-';
+        string++;
+    } else if (flags & SPACE_FLAG) {
+        *string = number >= 0 ? ' ' : '-';
+        string++;
+    } else if (number < 0) {
+        *string = '-';
+        string++;
+    }
+    // Запись числа
+    while (i > 0) {
+        temp = (int)abs_number ; // Выделение цифры
+        string[j] = temp + '0'; // Запись цифры
+        i--;
+        j++;
+        if (i == precision) {
+            string[j] = '.';
+            j++;
+        }
+        // Вычитаем целую часть из числа и переходим к следующему разряду
+        // Округляем до ближайшего последнюю цифру, ибо из-за мантиссы могут быть ошибки
+        abs_number -= (long double)temp; 
+        abs_number = (i == 1) ? (roundl(abs_number * 10)) : (abs_number * 10); 
+    }
+    string[j] = '\0';
+    *string_pointer += j;
+    return SUCCEED;
+}
+
 
 int GetNumberLength(long long number, int radix) {
     return (int)(log(number)/log(radix)) + 1;
