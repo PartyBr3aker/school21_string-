@@ -27,6 +27,7 @@ SRCS =  s21_memchr.c \
 		s21_to_lower.c \
 		s21_insert.c \
 		s21_trim.c \
+		s21_sprintf.c \
 		s21_string_tests.c
 OBJS = $(SRCS:.c=.o)
 NAME = test
@@ -60,7 +61,7 @@ s21_string.a: $(OBJS)
 gcov_report:
 	$(CC) -o $(NAME) $(SRCS) $(ALL_FLAGS)
 	./$(NAME)
-	~/homebrew/bin/lcov -t "gcov_report" -o s21_string_tests.info -c -d .
-	~/homebrew/bin/genhtml -o $(REPORT_NAME) s21_string_tests.info
+	lcov -t "gcov_report" -o s21_string_tests.info -c -d .
+	genhtml -o $(REPORT_NAME) s21_string_tests.info
 	rm $(NAME)
 	make clean

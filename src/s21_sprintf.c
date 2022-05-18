@@ -42,7 +42,7 @@
 
 typedef enum SPECIFICATORS {C, F, S, PERCENT, I, U, D} SPECIFICATORS;
 
-int ParseSpecificator(char **string_pointer, const char **format_pointer, int *flags, int *width, int *precision, int *length, SPECIFICATORS *specificator);
+int ParseSpecificator(const char **format_pointer, int *flags, int *width, int *precision, int *length, SPECIFICATORS *specificator);
 int GetFlags(const char **format_pointer, int *flags);
 int GetWidth(const char **format_pointer, int *width);
 int GetPrecision(const char **format_pointer, int *precision);
@@ -54,6 +54,8 @@ int IsSpecificator(char c);
 int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix);
 int DoubleToString(char **string_pointer, double number, int flags, int width, int precision);
 int GetNumberLength(long long number, int radix);
+int StringToString(char **string_pointer, char *string_input, int flags, int width, int precision);
+int CharToString(char **string_pointer, char char_input, int flags, int width);
 
 int s21_sprintf(char *str, const char *format, ...) {
     int flags = 0, width = 0, precision = 0, length = 0;
@@ -63,6 +65,8 @@ int s21_sprintf(char *str, const char *format, ...) {
     va_start(argument_list, format);
     long long number;
     double double_number;
+    char symbol;
+    char* string_for_print;
 
     while (status == SUCCEED && *format) {
         if (*format != '%') {
@@ -70,33 +74,35 @@ int s21_sprintf(char *str, const char *format, ...) {
             str++;
         } else {
             format++;
-            status = ParseSpecificator(&str, &format, &flags, &width, &precision, &length, &specificator);
+            status = ParseSpecificator(&format, &flags, &width, &precision, &length, &specificator);
             switch (specificator)
             {
             case C:
+                symbol = (char)va_arg(argument_list, int);
+                CharToString(&str, symbol, flags, width);
                 break;
             case F:
-                double_number = (width & H_LENGH_FLAG) ? va_arg(argument_list, float) : (width & L_LENGH_FLAG) ? va_arg(argument_list, double) : va_arg(argument_list, float);
-                DoubleToString(string_pointer, double_number, flags, width, precision);
+                double_number = va_arg(argument_list, double);
+                double_number = (width & L_LENGH_FLAG) ? double_number : (float)double_number;
+                DoubleToString(&str, double_number, flags, width, precision);
                 break;
             case S:
+                string_for_print = va_arg(argument_list, char*);
+                StringToString(&str, string_for_print, flags, width, precision);
                 break;
             case PERCENT:
                 *str = '%';
                 str++;
                 break;
             case I:
-            ;
                 number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
                 IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case U:
-            ;
                 number = (width & H_LENGH_FLAG) ? va_arg(argument_list, unsigned int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, unsigned long) : va_arg(argument_list, unsigned int);
                 IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
             case D:
-            ;
                 number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int) : (width & L_LENGH_FLAG) ? va_arg(argument_list, long) : va_arg(argument_list, int);
                 IntToString(&str, (long long)number, flags, width, precision, 10);
                 break;
@@ -106,14 +112,12 @@ int s21_sprintf(char *str, const char *format, ...) {
         }
     }
     str = 0;
+    va_end(argument_list);
     return status;
 }
 
-int ParseSpecificator(char **string_pointer, const char **format_pointer, int *flags, int *width, int *precision, int *length, SPECIFICATORS *specificator) {
+int ParseSpecificator(const char **format_pointer, int *flags, int *width, int *precision, int *length, SPECIFICATORS *specificator) {
     int status = SUCCEED;
-    char* string = *string_pointer;
-    const char* format = *format_pointer;
-
     status = GetFlags(format_pointer, flags);
     if (status == SUCCEED) status = GetWidth(format_pointer, width);
     if (status == SUCCEED) status = GetPrecision(format_pointer, precision);
@@ -233,7 +237,7 @@ int GetSpecificatior(const char **format_pointer, SPECIFICATORS *specificator) {
         } else if (format == 's') {
             _specificator = S;
         } else if (format == '%') {
-            _specificator == PERCENT;
+            _specificator = PERCENT;
         } else if (format == 'i') {
             _specificator = I;
         } else if (format == 'u') {
@@ -265,7 +269,7 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix) {
     precision += precision ? 1 : 0;
-    s21_size_t length = GetNumberLength(number, radix) + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
+    int length = GetNumberLength(number, radix) + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
     char* string = *string_pointer;
     s21_memset(string, ' ', width);
@@ -356,4 +360,39 @@ int DoubleToString(char **string_pointer, double number, int flags, int width, i
 
 int GetNumberLength(long long number, int radix) {
     return (int)(log(number)/log(radix)) + 1;
+}
+
+int StringToString(char **string_pointer, char *string_input, int flags, int width, int precision) {
+    char* string = *string_pointer;
+    // Length of the formatted string
+    int length = s21_strlen(string_input);
+    // Shortening the string to the precision
+    length = (precision <= length && precision >= 0) ? precision : length;
+    // Adding extra spaces if width is greater than length
+    width = (length >= width) ? length : width; 
+    s21_memset(string, ' ', width);
+    if (!(flags & MINUS_FLAG)) {  // Left alignment
+        string+= width - length;
+    }
+    while (length) {
+        *string = *string_input;
+        string++;
+        string_input++;
+        length--;
+    }
+    *string_pointer += width;
+    return SUCCEED;
+}
+
+int CharToString(char **string_pointer, char char_input, int flags, int width) {
+    char* string = *string_pointer;
+    width = (1 >= width) ? 1 : width;
+    s21_memset(string, ' ', width);
+    if (!(flags & MINUS_FLAG)) {  // Left alignment
+        string+= width - 1;
+    }
+    *string = char_input;
+    string++;
+    *string_pointer += width;
+    return SUCCEED;
 }
