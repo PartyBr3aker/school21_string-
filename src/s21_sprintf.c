@@ -111,7 +111,7 @@ int s21_sprintf(char *str, const char *format, ...) {
             }
         }
     }
-    str = 0;
+    *str = 0;
     va_end(argument_list);
     return status;
 }
@@ -201,7 +201,7 @@ int GetPrecision(const char **format_pointer, int *precision) {
             *precision = (int)_precision;
         }
     } else {
-        precision = 0;
+        *precision = -1;
     }
     return status;
 }
@@ -268,7 +268,7 @@ int IsSpecificator(char c) {
 }
 
 int IntToString(char **string_pointer, long long int number, int flags, int width, int precision, int radix) {
-    precision += precision ? 1 : 0;
+    precision += precision == -1 ? 1 : 0;
     int length = GetNumberLength(number, radix) + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
     char* string = *string_pointer;
@@ -307,7 +307,7 @@ int IntToString(char **string_pointer, long long int number, int flags, int widt
 int DoubleToString(char **string_pointer, double number, int flags, int width, int precision) {
     char* string = *string_pointer;
     char temp = ' '; 
-    int i = precision; // i - Счетчик оставшихся знаков после запятой
+    int i = precision == -1 ? 0 : precision; // i - Счетчик оставшихся знаков после запятой
     int j = 0; // j - Позиция в выходной строке
     long double abs_number = number >= 0 ? number : -number;
     s21_size_t int_length = GetNumberLength(abs_number, 10); // Длина целой части
@@ -396,3 +396,4 @@ int CharToString(char **string_pointer, char char_input, int flags, int width) {
     *string_pointer += width;
     return SUCCEED;
 }
+

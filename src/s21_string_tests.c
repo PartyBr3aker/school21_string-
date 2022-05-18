@@ -835,7 +835,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_1) {
     char buffer1[100], buffer2[100];
-    sprintf(buffer1, "Hello world!");
+    s21_sprintf(buffer1, "Hello world!");
     sprintf(buffer2, "Hello world!");
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -843,7 +843,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_2) {
     char buffer1[100], buffer2[100];
-    sprintf(buffer1, "Hello world!\n");
+    s21_sprintf(buffer1, "Hello world!\n");
     sprintf(buffer2, "Hello world!\n");
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -852,7 +852,7 @@ END_TEST
 START_TEST(s21_sprintf_test_3) {
     char buffer1[100], buffer2[100];
     char symbol = 'A';
-    sprintf(buffer1, "%c", symbol);
+    s21_sprintf(buffer1, "%c", symbol);
     sprintf(buffer2, "%c", symbol);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -861,7 +861,7 @@ END_TEST
 START_TEST(s21_sprintf_test_4) {
     char buffer1[100], buffer2[100];
     char symbol = 'a';
-    sprintf(buffer1, "%c", symbol);
+    s21_sprintf(buffer1, "%c", symbol);
     sprintf(buffer2, "%c", symbol);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -871,7 +871,7 @@ END_TEST
 START_TEST(s21_sprintf_test_5) {
     char buffer1[100], buffer2[100];
     char *word = "world!";
-    sprintf(buffer1, "Hello %s", word);
+    s21_sprintf(buffer1, "Hello %s", word);
     sprintf(buffer2, "Hello %s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -880,7 +880,7 @@ END_TEST
 START_TEST(s21_sprintf_test_6) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%d", number);
+    s21_sprintf(buffer1, "%d", number);
     sprintf(buffer2, "%d", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -889,7 +889,7 @@ END_TEST
 START_TEST(s21_sprintf_test_7) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%i", number);
+    s21_sprintf(buffer1, "%i", number);
     sprintf(buffer2, "%i", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -898,7 +898,7 @@ END_TEST
 START_TEST(s21_sprintf_test_8) {
     char buffer1[100], buffer2[100];
     int number = -10;
-    sprintf(buffer1, "%i", number);
+    s21_sprintf(buffer1, "%i", number);
     sprintf(buffer2, "%i", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -907,7 +907,7 @@ END_TEST
 START_TEST(s21_sprintf_test_9) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%u", number);
+    s21_sprintf(buffer1, "%u", number);
     sprintf(buffer2, "%u", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -916,7 +916,7 @@ END_TEST
 START_TEST(s21_sprintf_test_10) {
     char buffer1[100], buffer2[100];
     int number = -10;
-    sprintf(buffer1, "%u", number);
+    s21_sprintf(buffer1, "%u", number);
     sprintf(buffer2, "%u", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -925,7 +925,7 @@ END_TEST
 START_TEST(s21_sprintf_test_11) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "%f", number);
+    s21_sprintf(buffer1, "%f", number);
     sprintf(buffer2, "%f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -934,7 +934,7 @@ END_TEST
 START_TEST(s21_sprintf_test_12) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%f", number);
+    s21_sprintf(buffer1, "%f", number);
     sprintf(buffer2, "%f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -944,7 +944,7 @@ END_TEST
 START_TEST(s21_sprintf_test_13) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "%-f", number);
+    s21_sprintf(buffer1, "%-f", number);
     sprintf(buffer2, "%-f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -953,7 +953,7 @@ END_TEST
 START_TEST(s21_sprintf_test_14) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "%+f", number);
+    s21_sprintf(buffer1, "%+f", number);
     sprintf(buffer2, "%+f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -962,7 +962,7 @@ END_TEST
 START_TEST(s21_sprintf_test_15) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "% f", number);
+    s21_sprintf(buffer1, "% f", number);
     sprintf(buffer2, "% f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -971,7 +971,7 @@ END_TEST
 START_TEST(s21_sprintf_test_16) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%-f", number);
+    s21_sprintf(buffer1, "%-f", number);
     sprintf(buffer2, "%-f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -980,7 +980,7 @@ END_TEST
 START_TEST(s21_sprintf_test_17) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%+f", number);
+    s21_sprintf(buffer1, "%+f", number);
     sprintf(buffer2, "%+f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -989,7 +989,7 @@ END_TEST
 START_TEST(s21_sprintf_test_18) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "% f", number);
+    s21_sprintf(buffer1, "% f", number);
     sprintf(buffer2, "% f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -998,7 +998,7 @@ END_TEST
 START_TEST(s21_sprintf_test_19) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "% f", number);
+    s21_sprintf(buffer1, "% f", number);
     sprintf(buffer2, "% f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1008,7 +1008,7 @@ END_TEST
 START_TEST(s21_sprintf_test_20) {
     char buffer1[100], buffer2[100];
     char* word = "ABC";
-    sprintf(buffer1, "%-10s", word);
+    s21_sprintf(buffer1, "%-10s", word);
     sprintf(buffer2, "%-10s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1020,7 +1020,7 @@ END_TEST
 START_TEST(s21_sprintf_test_21) {
     char buffer1[100], buffer2[100];
     char* word = "ABCDEFG";
-    sprintf(buffer1, "%1s", word);
+    s21_sprintf(buffer1, "%1s", word);
     sprintf(buffer2, "%1s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1029,7 +1029,7 @@ END_TEST
 START_TEST(s21_sprintf_test_22) {
     char buffer1[100], buffer2[100];
     char* word = "ABCDEFG";
-    sprintf(buffer1, "%10s", word);
+    s21_sprintf(buffer1, "%10s", word);
     sprintf(buffer2, "%10s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1038,7 +1038,7 @@ END_TEST
 START_TEST(s21_sprintf_test_23) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%1f", number);
+    s21_sprintf(buffer1, "%1f", number);
     sprintf(buffer2, "%1f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1047,7 +1047,7 @@ END_TEST
 START_TEST(s21_sprintf_test_24) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%10f", number);
+    s21_sprintf(buffer1, "%10f", number);
     sprintf(buffer2, "%10f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1056,7 +1056,7 @@ END_TEST
 START_TEST(s21_sprintf_test_25) {
     char buffer1[100], buffer2[100];
     double number = -10.5;
-    sprintf(buffer1, "%0f", number);
+    s21_sprintf(buffer1, "%0f", number);
     sprintf(buffer2, "%0f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1066,7 +1066,7 @@ END_TEST
 START_TEST(s21_sprintf_test_26) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "%.0f", number);
+    s21_sprintf(buffer1, "%.0f", number);
     sprintf(buffer2, "%.0f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1075,7 +1075,7 @@ END_TEST
 START_TEST(s21_sprintf_test_27) {
     char buffer1[100], buffer2[100];
     double number = 10.5;
-    sprintf(buffer1, "%.10f", number);
+    s21_sprintf(buffer1, "%.10f", number);
     sprintf(buffer2, "%.10f", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1085,7 +1085,7 @@ END_TEST
 START_TEST(s21_sprintf_test_28) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%.0d", number);
+    s21_sprintf(buffer1, "%.0d", number);
     sprintf(buffer2, "%.0d", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1094,7 +1094,7 @@ END_TEST
 START_TEST(s21_sprintf_test_29) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%.10d", number);
+    s21_sprintf(buffer1, "%.10d", number);
     sprintf(buffer2, "%.10d", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1103,7 +1103,7 @@ END_TEST
 START_TEST(s21_sprintf_test_30) {
     char buffer1[100], buffer2[100];
     char* word = "ABC";
-    sprintf(buffer1, "%.0s", word);
+    s21_sprintf(buffer1, "%.0s", word);
     sprintf(buffer2, "%.0s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1112,7 +1112,7 @@ END_TEST
 START_TEST(s21_sprintf_test_31) {
     char buffer1[100], buffer2[100];
     char* word = "ABC";
-    sprintf(buffer1, "%.2s", word);
+    s21_sprintf(buffer1, "%.2s", word);
     sprintf(buffer2, "%.2s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1121,7 +1121,7 @@ END_TEST
 START_TEST(s21_sprintf_test_32) {
     char buffer1[100], buffer2[100];
     char* word = "ABC";
-    sprintf(buffer1, "%.10s", word);
+    s21_sprintf(buffer1, "%.10s", word);
     sprintf(buffer2, "%.10s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1131,7 +1131,7 @@ END_TEST
 START_TEST(s21_sprintf_test_33) {
     char buffer1[100], buffer2[100];
     int number = 10;
-    sprintf(buffer1, "%hd", number);
+    s21_sprintf(buffer1, "%hd", number);
     sprintf(buffer2, "%hd", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1140,7 +1140,7 @@ END_TEST
 START_TEST(s21_sprintf_test_34) {
     char buffer1[100], buffer2[100];
     long int number = 10;
-    sprintf(buffer1, "%li", number);
+    s21_sprintf(buffer1, "%li", number);
     sprintf(buffer2, "%li", number);
     ck_assert_str_eq(buffer1, buffer2);
 }
@@ -1149,7 +1149,7 @@ END_TEST
 START_TEST(s21_sprintf_test_35) {
     char buffer1[100], buffer2[100];
     char symbol = 'A';
-    sprintf(buffer1, "%lc", symbol);
+    s21_sprintf(buffer1, "%lc", symbol);
     sprintf(buffer2, "%lc", symbol);
     ck_assert_str_eq(buffer1, buffer2);
 }
