@@ -775,35 +775,59 @@ END_TEST
 
 // 23 функция insert. 1й тест
 START_TEST(s21_insert_test_1) {
-    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "He123llo");
+    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "H123ello");
 }
 END_TEST
 
-// 24 функция insert. 1й тест
+// 23 функция insert. 2й тест
+START_TEST(s21_insert_test_2) {
+    ck_assert_pstr_eq(s21_insert("", "Hello world\n", 1), "Hello world\n");
+}
+END_TEST
+
+// 23 функция insert. 3й тест
+START_TEST(s21_insert_test_3) {
+    ck_assert_pstr_eq(s21_insert("", "", 1), "");
+}
+END_TEST
+
+// 23 функция insert. 4й тест
+START_TEST(s21_insert_test_4) {
+    ck_assert_pstr_eq(s21_insert("Hello", "123", 0), "Hello");
+}
+END_TEST
+
+// 23 функция insert. 5й тест
+START_TEST(s21_insert_test_5) {
+    ck_assert_pstr_eq(s21_insert("Hello", " \n", 2), "H \nello");
+}
+END_TEST
+
+// 24 функция trim. 1й тест
 START_TEST(s21_trim_test_1) {
     ck_assert_pstr_eq(s21_trim("123123123Hello123123123", "123"), "Hello");
 }
 END_TEST
 
-// 24 функция insert. 2й тест
+// 24 функция trim. 2й тест
 START_TEST(s21_trim_test_2) {
     ck_assert_pstr_eq(s21_trim("Hello world\n\0", " "), "Hello world\n\0");
 }
 END_TEST
 
-// 24 функция insert. 3й тест
+// 24 функция trim. 3й тест
 START_TEST(s21_trim_test_3) {
-    ck_assert_pstr_eq(s21_trim("aa", "a"), S21_NULL);
+    ck_assert_pstr_eq(s21_trim("aa", "a"), "");
 }
 END_TEST
 
-// 24 функция insert. 4й тест
+// 24 функция trim. 4й тест
 START_TEST(s21_trim_test_4) {
     ck_assert_pstr_eq(s21_trim("a\n\0", "\n"), "a\0");
 }
 END_TEST
 
-// 24 функция insert. 5й тест
+// 24 функция trim. 5й тест
 START_TEST(s21_trim_test_5) {
     ck_assert_pstr_eq(s21_trim(" a ", "1"), " a ");
 }
@@ -1236,6 +1260,10 @@ Suite *s21_insert_suite(void) {
     tc_core = tcase_create("Core");
 
     tcase_add_test(tc_core, s21_insert_test_1);
+    tcase_add_test(tc_core, s21_insert_test_2);
+    tcase_add_test(tc_core, s21_insert_test_3);
+    tcase_add_test(tc_core, s21_insert_test_4);
+    tcase_add_test(tc_core, s21_insert_test_5);
 
     suite_add_tcase(s, tc_core);
 

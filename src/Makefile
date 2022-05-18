@@ -3,7 +3,6 @@ CFLAGS=-Wall -Werror -Wextra
 GCOV_FLAGS=-fprofile-arcs -ftest-coverage -lgcov
 CHECK_FLAGS=-lcheck -lm -lpthread
 ALL_FLAGS=$(CFLAGS) $(GCOV_FLAGS) $(CHECK_FLAGS)
-DIR_OUT=../s21_string/
 SRCS =  s21_memchr.c \
 		s21_memcmp.c \
 		s21_memcpy.c \
