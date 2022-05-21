@@ -2,7 +2,7 @@
 #include <check.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include "s21_string.h"
 
 void srunner_set_fork_status(SRunner * sr, enum fork_status fstat);
@@ -803,28 +803,42 @@ END_TEST
 
 // 24 функция trim. 1й тест
 START_TEST(s21_trim_test_1) {
-    ck_assert_pstr_eq(s21_trim("123123123Hello123123123", "123"), "Hello");
+    char* res = s21_trim("123123123Hello123123123", "123");
+    ck_assert_pstr_eq(res, "Hello");
+    free(res);
 }
 END_TEST
 
 // 24 функция trim. 2й тест
 START_TEST(s21_trim_test_2) {
-    ck_assert_pstr_eq(s21_trim("Hello world\n\0", " "), "Hello world\n\0");
+    char* res = s21_trim("Hello world\n\0", " ");
+    ck_assert_pstr_eq(res, "Hello world\n\0");
+    free(res);
 }
 END_TEST
 
 // 24 функция trim. 3й тест
-START_TEST(s21_trim_test_3) { ck_assert_pstr_eq(s21_trim("aa", "a"), ""); }
+START_TEST(s21_trim_test_3) {
+    char* res = s21_trim("aa", "a");
+    ck_assert_pstr_eq(res, "");
+    free(res);
+}
 END_TEST
 
 // 24 функция trim. 4й тест
 START_TEST(s21_trim_test_4) {
-    ck_assert_pstr_eq(s21_trim("a\n\0", "\n"), "a\0");
+    char* res = s21_trim("a\n\0", "\n");
+    ck_assert_pstr_eq(res, "a\0");
+    free(res);
 }
 END_TEST
 
 // 24 функция trim. 5й тест
-START_TEST(s21_trim_test_5) { ck_assert_pstr_eq(s21_trim(" a ", "1"), " a "); }
+START_TEST(s21_trim_test_5) {
+    char* res = s21_trim(" a ", "1");
+    ck_assert_pstr_eq(res, " a ");
+    free(res);
+}
 END_TEST
 
 START_TEST(s21_sprintf_test_1) {

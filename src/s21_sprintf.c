@@ -3,35 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "s21_string.h"
-// 1
-// c
-// Символ
-// Символ
-// int CSpecificator(char* dest, char** end_of_string, char c, int flags, int
-// width, int long_flag); Если width == -1, то значит спецификатора не было
-
-// 4
-// f
-// Десятичное число с плавающей точкой
-// Десятичное число с плавающей точкой или научная нотация (мантисса/экспонента)
-// int FlSpecificator(char* dest, char** end_of_string, float number, int flags,
-// int width, int precision); int LfSpecificator(char* dest, char**
-// end_of_string, double number, int flags, int width, int precision); просто
-// дабловский
-
-// 5
-// s
-// Строка символов
-// Строка символов
-// int SSpecificator(char* dest, char** end_of_string, char* string, int flags,
-// int width, int long_flag);
-
-// 7
-// %
-// Символ %
-// Символ %
 
 #define SUCCEED 0
 #define ERROR -1
@@ -216,6 +188,7 @@ int GetPrecision(const char **format_pointer, int *precision) {
     unsigned int _precision = 0;
 
     if (*format == '.') {
+        format++;
         while (status == SUCCEED && IsDigit(*format)) {
             _precision *= 10;
             _precision += *format - '0';
@@ -294,27 +267,24 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
-    precision += precision == -1 ? 1 : 0;
+    precision = precision == -1 ? 0 : precision;
     int length = GetNumberLength(number, radix) + precision +
                  (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
+    width = (width > precision) ? width : precision;
     char *string = *string_pointer;
     s21_memset(string, ' ', width);
     long long int abs_number = number >= 0 ? number : -number;
     char *end_of_number =
         (flags & MINUS_FLAG) ? (string + length) : (string + width);
     end_of_number--;
-    for (; end_of_number > string + width; end_of_number--) {
-        *end_of_number = '0';
+    char* precision_end = end_of_number;
+    for (; precision; precision--, precision_end--) {
+        *precision_end = '0';
     }
 
-    if (precision > 0) {
-        *end_of_number = '.';
-        end_of_number--;
-    }
-
-    for (; abs_number > 0; abs_number /= 10, end_of_number--) {
-        *end_of_number = abs_number % 10 + '0';
+    for (; abs_number > 0; abs_number /= radix, end_of_number--) {
+        *end_of_number = abs_number % radix + '0';
     }
 
     if (flags & PLUS_FLAG) {
@@ -332,61 +302,55 @@ int IntToString(char **string_pointer, long long int number, int flags,
     return SUCCEED;
 }
 
-int DoubleToString(char **string_pointer, double number, int flags, int width,
-                   int precision) {
-    char *string = *string_pointer;
-    char temp = ' ';
-    int i = precision == -1
-                ? 0
-                : precision;  // i - Счетчик оставшихся знаков после запятой
-    int j = 0;  // j - Позиция в выходной строке
+int DoubleToString(char **string_pointer, double number, int flags, int width, int precision) {
+    char* string = *string_pointer;
+    int temp = 0; 
+    precision = (precision == -1) ? 6 : precision;
+    int i = precision; // i - Счетчик оставшихся знаков после запятой
+    int j = 0; // j - Позиция в выходной строке
     long double abs_number = number >= 0 ? number : -number;
-    s21_size_t int_length =
-        GetNumberLength(abs_number, 10);  // Длина целой части
-    s21_size_t length =
-        int_length + precision +
-        (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) +
-        (precision != 0);
+    s21_size_t int_length = GetNumberLength(abs_number, 10); // Длина целой части
+    s21_size_t length = int_length + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) + (precision != 0);
     width -= length;
-    // Округление числа
+    // Округление числа до ближайшего четного
     abs_number = abs_number * pow(10, precision);
-    abs_number = roundl(abs_number);
-    abs_number = abs_number / pow(10, precision);
-    // Преобразуем к нормированной строке вида X.ХХХХХХ
-    abs_number = abs_number / pow(10, int_length - 1);
+    long double intpart = 0;
+    long double fractpart = modfl(abs_number, &intpart);
+    if(fractpart != 0.5) {
+        abs_number = roundl(abs_number);
+    } else if((int)abs_number % 2 == 0) {
+        abs_number = floorl(abs_number);
+    } else {
+        abs_number = roundl(abs_number);
+    }
     i += int_length;
     // Формирование строки
     while (width > 0 && (flags & MINUS_FLAG) == 0) {
-        *string = ' ';
-        string++;
+        string[j] = ' ';
+        j++;
         width--;
     }
     // Обработка флагов для записи первого символа
     if (flags & PLUS_FLAG) {
-        *string = number >= 0 ? '+' : '-';
-        string++;
+        string[j] = number >= 0 ? '+' : '-';
+        j++;
     } else if (flags & SPACE_FLAG) {
-        *string = number >= 0 ? ' ' : '-';
-        string++;
+        string[j] = number >= 0 ? ' ' : '-';
+        j++;
     } else if (number < 0) {
-        *string = '-';
-        string++;
+        string[j] = '-';
+        j++;
     }
     // Запись числа
     while (i > 0) {
-        temp = (int)abs_number;  // Выделение цифры
-        string[j] = temp + '0';  // Запись цифры
+        temp = fmod(abs_number / (powl(10, i-1)), 10); // Выделение цифры
+        string[j] = temp + '0'; // Запись цифры
         i--;
         j++;
-        if (i == precision) {
+        if (i == precision && i != 0) {
             string[j] = '.';
             j++;
         }
-        // Вычитаем целую часть из числа и переходим к следующему разряду
-        // Округляем до ближайшего последнюю цифру, ибо из-за мантиссы могут
-        // быть ошибки
-        abs_number -= (long double)temp;
-        abs_number = (i == 1) ? (roundl(abs_number * 10)) : (abs_number * 10);
     }
     string[j] = '\0';
     *string_pointer += j;
@@ -394,6 +358,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
 }
 
 int GetNumberLength(long long number, int radix) {
+    number = number < 0 ? -number : number;
     return (int)(log(number) / log(radix)) + 1;
 }
 
@@ -432,3 +397,22 @@ int CharToString(char **string_pointer, char char_input, int flags, int width) {
     *string_pointer += width;
     return SUCCEED;
 }
+
+// s21_size_t s21_strlen(const char *str) {
+//     s21_size_t len = 0;
+//     for (; str[len]; len++) {
+//     }
+//     return len;
+// }
+
+// void *s21_memset(void *str, int c, s21_size_t n) {
+//     unsigned char *ptr = str;
+//     while (n--) {
+//         *ptr++ = (unsigned char)c;
+//     }
+//     return str;
+// }
+
+// void main() {
+//     printf("%0.6d", 10);
+// }

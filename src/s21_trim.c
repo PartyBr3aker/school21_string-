@@ -26,8 +26,6 @@ void *s21_trim(const char *src, const char *trim_chars) {
         }
         out[length_out - 1] = '\0';
     }
-    char *out1 = out;
-    free(out);
     free(reverse);
-    return out1;
+    return out;
 }
