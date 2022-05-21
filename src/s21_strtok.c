@@ -29,7 +29,7 @@ char *s21_strtok(char *str, const char *delim) {
                 // we've reached the end of the string
                 // and no regular character was there
             } else {
-                regular = 1; // we've found a regular character
+                regular = 1;  // we've found a regular character
             }
         }
         if (!all_deligms) {  // if the string still contains smth

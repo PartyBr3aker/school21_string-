@@ -1,8 +1,12 @@
 // Copyright 2022 shenatam
 #include <check.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+
 #include "s21_string.h"
+
+void srunner_set_fork_status(SRunner * sr, enum fork_status fstat);
+
 // 1 функция. 1й тест
 START_TEST(s21_memchr_test_1) {
     ck_assert_pstr_eq(s21_memchr("qwerty", 'e', 5), memchr("qwerty", 'e', 5));
@@ -738,9 +742,7 @@ START_TEST(s21_to_upper_test_4) {
 END_TEST
 
 // 21 функция to_upper. 5й тест
-START_TEST(s21_to_upper_test_5) {
-    ck_assert_pstr_eq(s21_to_upper("\0"), "\0");
-}
+START_TEST(s21_to_upper_test_5) { ck_assert_pstr_eq(s21_to_upper("\0"), "\0"); }
 END_TEST
 
 // 22 функция to_lower. 1й тест
@@ -768,9 +770,7 @@ START_TEST(s21_to_lower_test_4) {
 END_TEST
 
 // 22 функция to_lower. 5й тест
-START_TEST(s21_to_lower_test_5) {
-    ck_assert_pstr_eq(s21_to_lower("\0"), "\0");
-}
+START_TEST(s21_to_lower_test_5) { ck_assert_pstr_eq(s21_to_lower("\0"), "\0"); }
 END_TEST
 
 // 23 функция insert. 1й тест
@@ -786,9 +786,7 @@ START_TEST(s21_insert_test_2) {
 END_TEST
 
 // 23 функция insert. 3й тест
-START_TEST(s21_insert_test_3) {
-    ck_assert_pstr_eq(s21_insert("", "", 1), "");
-}
+START_TEST(s21_insert_test_3) { ck_assert_pstr_eq(s21_insert("", "", 1), ""); }
 END_TEST
 
 // 23 функция insert. 4й тест
@@ -816,9 +814,7 @@ START_TEST(s21_trim_test_2) {
 END_TEST
 
 // 24 функция trim. 3й тест
-START_TEST(s21_trim_test_3) {
-    ck_assert_pstr_eq(s21_trim("aa", "a"), "");
-}
+START_TEST(s21_trim_test_3) { ck_assert_pstr_eq(s21_trim("aa", "a"), ""); }
 END_TEST
 
 // 24 функция trim. 4й тест
@@ -828,9 +824,7 @@ START_TEST(s21_trim_test_4) {
 END_TEST
 
 // 24 функция trim. 5й тест
-START_TEST(s21_trim_test_5) {
-    ck_assert_pstr_eq(s21_trim(" a ", "1"), " a ");
-}
+START_TEST(s21_trim_test_5) { ck_assert_pstr_eq(s21_trim(" a ", "1"), " a "); }
 END_TEST
 
 START_TEST(s21_sprintf_test_1) {
@@ -866,7 +860,6 @@ START_TEST(s21_sprintf_test_4) {
     ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
-
 
 START_TEST(s21_sprintf_test_5) {
     char buffer1[100], buffer2[100];
@@ -1004,22 +997,20 @@ START_TEST(s21_sprintf_test_19) {
 }
 END_TEST
 
-
 START_TEST(s21_sprintf_test_20) {
     char buffer1[100], buffer2[100];
-    char* word = "ABC";
+    char *word = "ABC";
     s21_sprintf(buffer1, "%-10s", word);
     sprintf(buffer2, "%-10s", word);
     ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
 
-
 //  tests for width description
 
 START_TEST(s21_sprintf_test_21) {
     char buffer1[100], buffer2[100];
-    char* word = "ABCDEFG";
+    char *word = "ABCDEFG";
     s21_sprintf(buffer1, "%1s", word);
     sprintf(buffer2, "%1s", word);
     ck_assert_str_eq(buffer1, buffer2);
@@ -1028,7 +1019,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_22) {
     char buffer1[100], buffer2[100];
-    char* word = "ABCDEFG";
+    char *word = "ABCDEFG";
     s21_sprintf(buffer1, "%10s", word);
     sprintf(buffer2, "%10s", word);
     ck_assert_str_eq(buffer1, buffer2);
@@ -1081,7 +1072,6 @@ START_TEST(s21_sprintf_test_27) {
 }
 END_TEST
 
-
 START_TEST(s21_sprintf_test_28) {
     char buffer1[100], buffer2[100];
     int number = 10;
@@ -1102,7 +1092,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_30) {
     char buffer1[100], buffer2[100];
-    char* word = "ABC";
+    char *word = "ABC";
     s21_sprintf(buffer1, "%.0s", word);
     sprintf(buffer2, "%.0s", word);
     ck_assert_str_eq(buffer1, buffer2);
@@ -1111,7 +1101,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_31) {
     char buffer1[100], buffer2[100];
-    char* word = "ABC";
+    char *word = "ABC";
     s21_sprintf(buffer1, "%.2s", word);
     sprintf(buffer2, "%.2s", word);
     ck_assert_str_eq(buffer1, buffer2);
@@ -1120,7 +1110,7 @@ END_TEST
 
 START_TEST(s21_sprintf_test_32) {
     char buffer1[100], buffer2[100];
-    char* word = "ABC";
+    char *word = "ABC";
     s21_sprintf(buffer1, "%.10s", word);
     sprintf(buffer2, "%.10s", word);
     ck_assert_str_eq(buffer1, buffer2);
@@ -1154,8 +1144,6 @@ START_TEST(s21_sprintf_test_35) {
     ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
-
-
 
 // 1 функция. Набор тестов
 Suite *s21_memchr_suite(void) {
@@ -1613,12 +1601,14 @@ Suite *s21_trim_suite(void) {
     return s;
 }
 
-// функция Sprintf. Набор тестов 1 без флагов для спецификаторов: c, d, i, f, s, u, %
+// функция Sprintf. Набор тестов 1 без флагов для спецификаторов: c, d, i, f, s,
+// u, %
 Suite *s21_sprintf_suite_without_flags(void) {
     TCase *tc_core;
     tc_core = tcase_create("Core");
     Suite *suite_without_flags;
-    suite_without_flags = suite_create("Testing specifiers: c, d, i, f, s, u, % without flags");
+    suite_without_flags =
+        suite_create("Testing specifiers: c, d, i, f, s, u, % without flags");
     tcase_add_test(tc_core, s21_sprintf_test_1);
     tcase_add_test(tc_core, s21_sprintf_test_2);
     tcase_add_test(tc_core, s21_sprintf_test_3);
@@ -1636,7 +1626,6 @@ Suite *s21_sprintf_suite_without_flags(void) {
 
     return suite_without_flags;
 }
-
 
 // функция Sprintf. Набор тестов 2 для флагов -, +, (space)
 Suite *s21_sprintf_suite_with_flags(void) {
@@ -1687,7 +1676,6 @@ Suite *s21_sprintf_suite_with_precision(void) {
     tcase_add_test(tc_core, s21_sprintf_test_31);
     tcase_add_test(tc_core, s21_sprintf_test_32);
 
-
     suite_add_tcase(suite_with_precision, tc_core);
 
     return suite_with_precision;
@@ -1712,6 +1700,8 @@ int s21_string_tests(Suite *s) {
     SRunner *runner;
 
     runner = srunner_create(s);
+
+    srunner_set_fork_status(runner, CK_NOFORK);
 
     srunner_run_all(runner, CK_NORMAL);
     no_failed = srunner_ntests_failed(runner);

@@ -1,6 +1,6 @@
 #ifndef SRC_S21_STRING_H_
 #define SRC_S21_STRING_H_
-#define S21_NULL (void*)0
+#define S21_NULL (void *)0
 typedef long unsigned s21_size_t;
 
 // 1. Searches for the first occurrence of the character c (an unsigned char)
@@ -87,12 +87,12 @@ void *s21_trim(const char *src, const char *trim_chars);
 int s21_sprintf(char *str, const char *format, ...);
 
 #ifdef __APPLE__
-extern char* _errors[107];
+extern char *_errors[107];
 #define MAX_ERROR 107
 #endif  // __APPLE__
 
 #ifdef __unix__
-extern char* _errors[133];
+extern char *_errors[134];
 #define MAX_ERROR 133
 #endif  // unix
 extern char unknown_error[150];

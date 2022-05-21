@@ -2,25 +2,23 @@
 
 s21_size_t s21_strlen(const char *str) {
     s21_size_t len = 0;
-<<<<<<< HEAD:src/s21_string/s21_string.c
-    for (; str[len]; len++) {};
+    for (; str[len]; len++) {
+    }
     return len;
-=======
-    for(; str[len]; len++);
-    return len;
-} 
+}
 
 // 2. Compares the first n bytes of str1 and str2
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
     int compare = 0;
     // Посимвольное сравнение с досрочным выходом, если есть отличие
     for (s21_size_t i = 0; i < n && compare == 0; i++) {
-        compare = *((char*)str1 + i) - *((char*)str2 + i);
+        compare = *((char *)str1 + i) - *((char *)str2 + i);
     }
     return compare;
 }
 
-// 7. Appends the string pointed to, by src to the end of the string pointed to, by dest up to n characters long.
+// 7. Appends the string pointed to, by src to the end of the string pointed to,
+// by dest up to n characters long.
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
     char *out = dest;
     // Перестановка указателя в конец строки dest
@@ -49,7 +47,8 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
     return out;
 }
 
-// 17. Searches for the last occurrence of the character c (an unsigned char) in the string pointed to by the argument str.
+// 17. Searches for the last occurrence of the character c (an unsigned char) in
+// the string pointed to by the argument str.
 char *s21_strrchr(const char *str, int c) {
     const char *out = S21_NULL;
     do {
@@ -57,6 +56,5 @@ char *s21_strrchr(const char *str, int c) {
             out = str;
         }
     } while (*str++);
-    return (char *) out;
->>>>>>> bouvierr:src/s21_string.c
+    return (char *)out;
 }
