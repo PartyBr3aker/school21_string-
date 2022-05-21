@@ -1,11 +1,12 @@
 #include <stdlib.h>
+
 #include "s21_string.h"
 
 void *s21_trim(const char *src, const char *trim_chars) {
     s21_size_t length_src = s21_strlen(src);
-    char reverse[length_src + 1];
+    char* reverse = (char*)malloc(sizeof(char) * (length_src + 1));
     // Переворот строки
-    for(s21_size_t i = 0; i < length_src; i++) {
+    for (s21_size_t i = 0; i < length_src; i++) {
         reverse[i] = src[length_src - 1 - i];
     }
     reverse[length_src] = '\0';
@@ -18,12 +19,15 @@ void *s21_trim(const char *src, const char *trim_chars) {
         length_out = length_src + 1 - begin_segment - end_segment;
     }
     // Итоговая строка
-    char *out = (char *) malloc(length_out);
+    char *out = (char *)malloc(length_out);
     if (out != S21_NULL) {
-        for (s21_size_t i = 0; i < (length_out) ; i++) {
+        for (s21_size_t i = 0; i < (length_out); i++) {
             out[i] = src[begin_segment + i];
         }
         out[length_out - 1] = '\0';
     }
-    return out;
+    char *out1 = out;
+    free(out);
+    free(reverse);
+    return out1;
 }

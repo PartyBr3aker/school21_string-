@@ -27,13 +27,13 @@ SRCS =  s21_memchr.c \
 		s21_to_lower.c \
 		s21_insert.c \
 		s21_trim.c \
-		s21_sprintf.c \
-		s21_string_tests.c
-OBJS = $(SRCS:.c=.o)
+		s21_sprintf.c
+OBJS = $(SRCS:.c=.o) s21_string_tests.o
+OBJST = $(SRCS:.c=.o) 
 NAME = test
 REPORT_NAME = report
 
-all: s21_string.a gcov_report
+all: s21_string.a
 	make test
 # %.o: %.c
 # $(CC) $(CFLAGS) $(CHECK_FLAGS) -c $< -o $@
@@ -55,11 +55,11 @@ clean:
 	rm -rf *.gcno
 	rm -rf *.gcda
 	rm -rf *.info
-s21_string.a: $(OBJS)
-	ar rc s21_string.a $(OBJS)
+s21_string.a: $(OBJST)
+	ar rc s21_string.a $(OBJST)
 	ranlib s21_string.a
 gcov_report:
-	$(CC) -o $(NAME) $(SRCS) $(ALL_FLAGS)
+	$(CC) -o $(NAME) $(SRCS) s21_string_tests.c $(ALL_FLAGS)
 	./$(NAME)
 	lcov -t "gcov_report" -o s21_string_tests.info -c -d .
 	genhtml -o $(REPORT_NAME) s21_string_tests.info
