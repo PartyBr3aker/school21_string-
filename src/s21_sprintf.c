@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "s21_string.h"
 
 #define SUCCEED 0
@@ -278,7 +279,7 @@ int IntToString(char **string_pointer, long long int number, int flags,
     char *end_of_number =
         (flags & MINUS_FLAG) ? (string + length) : (string + width);
     end_of_number--;
-    char* precision_end = end_of_number;
+    char *precision_end = end_of_number;
     for (; precision; precision--, precision_end--) {
         *precision_end = '0';
     }
@@ -302,23 +303,28 @@ int IntToString(char **string_pointer, long long int number, int flags,
     return SUCCEED;
 }
 
-int DoubleToString(char **string_pointer, double number, int flags, int width, int precision) {
-    char* string = *string_pointer;
-    int temp = 0; 
+int DoubleToString(char **string_pointer, double number, int flags, int width,
+                   int precision) {
+    char *string = *string_pointer;
+    int temp = 0;
     precision = (precision == -1) ? 6 : precision;
-    int i = precision; // i - Счетчик оставшихся знаков после запятой
-    int j = 0; // j - Позиция в выходной строке
+    int i = precision;  // i - Счетчик оставшихся знаков после запятой
+    int j = 0;          // j - Позиция в выходной строке
     long double abs_number = number >= 0 ? number : -number;
-    s21_size_t int_length = GetNumberLength(abs_number, 10); // Длина целой части
-    s21_size_t length = int_length + precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) + (precision != 0);
+    s21_size_t int_length =
+        GetNumberLength(abs_number, 10);  // Длина целой части
+    s21_size_t length =
+        int_length + precision +
+        (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) +
+        (precision != 0);
     width -= length;
     // Округление числа до ближайшего четного
     abs_number = abs_number * pow(10, precision);
     long double intpart = 0;
     long double fractpart = modfl(abs_number, &intpart);
-    if(fractpart != 0.5) {
+    if (fractpart != 0.5) {
         abs_number = roundl(abs_number);
-    } else if((int)abs_number % 2 == 0) {
+    } else if ((int)abs_number % 2 == 0) {
         abs_number = floorl(abs_number);
     } else {
         abs_number = roundl(abs_number);
@@ -343,8 +349,8 @@ int DoubleToString(char **string_pointer, double number, int flags, int width, i
     }
     // Запись числа
     while (i > 0) {
-        temp = fmod(abs_number / (powl(10, i-1)), 10); // Выделение цифры
-        string[j] = temp + '0'; // Запись цифры
+        temp = fmod(abs_number / (powl(10, i - 1)), 10);  // Выделение цифры
+        string[j] = temp + '0';  // Запись цифры
         i--;
         j++;
         if (i == precision && i != 0) {
