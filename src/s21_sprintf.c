@@ -268,7 +268,7 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
-    precision = precision == -1 ? 0 : precision;
+    precision = precision == -1 ? 0 : precision - 1;
     int length = GetNumberLength(number, radix) + precision +
                  (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
