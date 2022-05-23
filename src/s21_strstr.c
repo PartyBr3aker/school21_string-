@@ -13,8 +13,8 @@ char *s21_strstr(const char *haystack, const char *needle) {
     } else if (needle_lenght == 0) {
         result = haystack;
     } else {
-        for (s21_size_t i = 0; i < haystack_lenght - needle_lenght; ++i) {
-            for (s21_size_t j = 0; j < needle_lenght && !result; ++j) {
+        for (s21_size_t i = 0; i <= haystack_lenght - needle_lenght; ++i) {
+            for (s21_size_t j = 0; j <= needle_lenght && !result; ++j) {
                 if (haystack[i + j] != needle[j]) {
                     result = S21_NULL;
                     break;

@@ -19,7 +19,5 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
         }
         out[length] = '\0';
     }
-    char *out1 = out;
-    free(out);
-    return out1;
+    return out;
 }
