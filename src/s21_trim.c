@@ -1,7 +1,5 @@
 #include <stdlib.h>
-
 #include "s21_string.h"
-
 void *s21_trim(const char *src, const char *trim_chars) {
     s21_size_t length_src = s21_strlen(src);
     char* reverse = (char*)malloc(sizeof(char) * (length_src + 1));
@@ -10,10 +8,14 @@ void *s21_trim(const char *src, const char *trim_chars) {
         reverse[i] = src[length_src - 1 - i];
     }
     reverse[length_src] = '\0';
-    // Длина начального сегмента, состоящего из заданных символов
-    s21_size_t begin_segment = s21_strspn(src, trim_chars);
-    // Длина конечного сегмента, состоящего из заданных символов
-    s21_size_t end_segment = s21_strspn(reverse, trim_chars);
+    s21_size_t begin_segment = 0;
+    s21_size_t end_segment = 0;
+    if (trim_chars) {
+        // Длина начального сегмента, состоящего из заданных символов
+        begin_segment = s21_strspn(src, trim_chars);
+        // Длина конечного сегмента, состоящего из заданных символов
+        end_segment = s21_strspn(reverse, trim_chars);
+    }
     s21_size_t length_out = 1;
     if (begin_segment != length_src) {
         length_out = length_src + 1 - begin_segment - end_segment;
