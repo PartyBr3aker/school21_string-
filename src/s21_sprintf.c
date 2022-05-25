@@ -309,8 +309,11 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     int i = precision;  // i - Счетчик оставшихся знаков после запятой
     int j = 0;          // j - Позиция в выходной строке
     long double abs_number = number >= 0 ? number : -number;
-    s21_size_t int_length =
-        GetNumberLength(abs_number, 10);  // Длина целой части
+    s21_size_t int_length = 1;  // Длина целой части
+    if (abs_number >= 1) {
+        int_length =
+        GetNumberLength(abs_number, 10); 
+    }
     s21_size_t length =
         int_length + precision +
         (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) +
