@@ -388,7 +388,7 @@ int StringToString(char **string_pointer, char *string_input, int flags,
         length--;
     }
     *string_pointer += width;
-    return SUCCEED;
+    return width;
 }
 
 int CharToString(char **string_pointer, char char_input, int flags, int width) {
@@ -401,7 +401,7 @@ int CharToString(char **string_pointer, char char_input, int flags, int width) {
     *string = char_input;
     string++;
     *string_pointer += width;
-    return SUCCEED;
+    return width;
 }
 
 // s21_size_t s21_strlen(const char *str) {

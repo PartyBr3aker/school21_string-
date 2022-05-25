@@ -1,12 +1,20 @@
 #include "s21_string.h"
 
-void *s21_memmove(void *dest, const void *src, s21_size_t n) {
-    char *destanation_char_ptr = (char *)dest;
-    char *source_char_ptr = (char *)src;
-
-    for (s21_size_t i = 0; i < n; ++i) {
-        destanation_char_ptr[i] = source_char_ptr[i];
+void *s21_memmove(void *dest, const void *src, s21_size_t len) {
+    s21_size_t i;
+    i = 0;
+    if (len == 0 || src == dest)
+        return (dest);
+    if (dest > src && dest < src + len) {
+        while (len--)
+            ((unsigned char *)dest)[len] = ((unsigned char *)src)[len];
+        return (dest);
+    } else {
+        while (i++ < len) {
+            *((unsigned char *)dest) = *((unsigned char *)src);
+            ++dest;
+            ++src;
+        }
     }
-
-    return dest;
+    return (dest - len);
 }

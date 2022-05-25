@@ -16,7 +16,5 @@ void *s21_to_upper(const char *str) {
             }
         }
     }
-    char *out1 = out;
-    free(out);
-    return out1;
+    return out;
 }
