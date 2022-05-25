@@ -37,7 +37,6 @@ int GetNumberLength(long long number, int radix);
 int StringToString(char **string_pointer, char *string_input, int flags,
                    int width, int precision);
 int CharToString(char **string_pointer, char char_input, int flags, int width);
-
 int s21_sprintf(char *str, const char *format, ...) {
     int flags = 0, width = 0, precision = 0, length = 0;
     SPECIFICATORS specificator;
@@ -48,11 +47,12 @@ int s21_sprintf(char *str, const char *format, ...) {
     double double_number;
     char symbol;
     char *string_for_print;
-
+    long long num_of_printed_char = 0;
     while (status == SUCCEED && *format) {
         if (*format != '%') {
             *str = *format++;
             str++;
+            num_of_printed_char++;
         } else {
             format++;
             status = ParseSpecificator(&format, &flags, &width, &precision,
@@ -60,31 +60,29 @@ int s21_sprintf(char *str, const char *format, ...) {
             switch (specificator) {
                 case C:
                     symbol = (char)va_arg(argument_list, int);
-                    CharToString(&str, symbol, flags, width);
+                    num_of_printed_char = CharToString(&str, symbol, flags, width);
                     break;
                 case F:
                     double_number = va_arg(argument_list, double);
-                    double_number = (width & L_LENGH_FLAG)
-                                        ? double_number
-                                        : (float)double_number;
                     DoubleToString(&str, double_number, flags, width,
                                    precision);
                     break;
                 case S:
                     string_for_print = va_arg(argument_list, char *);
-                    StringToString(&str, string_for_print, flags, width,
+                    num_of_printed_char = StringToString(&str, string_for_print, flags, width,
                                    precision);
                     break;
                 case PERCENT:
                     *str = '%';
                     str++;
+                    num_of_printed_char++;
                     break;
                 case I:
                     number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int)
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, long)
                                  : va_arg(argument_list, int);
-                    IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 case U:
@@ -93,7 +91,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, unsigned long)
                                  : va_arg(argument_list, unsigned int);
-                    IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 case D:
@@ -101,7 +99,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, long)
                                  : va_arg(argument_list, int);
-                    IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 default:
@@ -111,7 +109,7 @@ int s21_sprintf(char *str, const char *format, ...) {
     }
     *str = 0;
     va_end(argument_list);
-    return status;
+    return num_of_printed_char;
 }
 
 int ParseSpecificator(const char **format_pointer, int *flags, int *width,
@@ -300,7 +298,7 @@ int IntToString(char **string_pointer, long long int number, int flags,
     }
 
     *string_pointer += width;
-    return SUCCEED;
+    return width;
 }
 
 int DoubleToString(char **string_pointer, double number, int flags, int width,
@@ -360,7 +358,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     }
     string[j] = '\0';
     *string_pointer += j;
-    return SUCCEED;
+    return j;
 }
 
 int GetNumberLength(long long number, int radix) {
@@ -371,6 +369,8 @@ int GetNumberLength(long long number, int radix) {
 int StringToString(char **string_pointer, char *string_input, int flags,
                    int width, int precision) {
     char *string = *string_pointer;
+    char null[7] = "(null)";
+    string_input = (string_input) ? string_input : null;
     // Length of the formatted string
     int length = s21_strlen(string_input);
     // Shortening the string to the precision
@@ -403,22 +403,3 @@ int CharToString(char **string_pointer, char char_input, int flags, int width) {
     *string_pointer += width;
     return width;
 }
-
-// s21_size_t s21_strlen(const char *str) {
-//     s21_size_t len = 0;
-//     for (; str[len]; len++) {
-//     }
-//     return len;
-// }
-
-// void *s21_memset(void *str, int c, s21_size_t n) {
-//     unsigned char *ptr = str;
-//     while (n--) {
-//         *ptr++ = (unsigned char)c;
-//     }
-//     return str;
-// }
-
-// void main() {
-//     printf("%0.6d", 10);
-// }
