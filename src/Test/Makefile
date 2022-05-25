@@ -3,31 +3,31 @@ CFLAGS=-Wall -Werror -Wextra -fsanitize=address
 GCOV_FLAGS=-fprofile-arcs -ftest-coverage -lgcov
 CHECK_FLAGS=-lcheck -lm -lpthread
 ALL_FLAGS=$(CFLAGS) $(GCOV_FLAGS) $(CHECK_FLAGS)
-SRCS =  ../C2_s21_stringplus-0/src/s21_memchr.c \
-		../C2_s21_stringplus-0/src/s21_memcmp.c \
-		../C2_s21_stringplus-0/src/s21_memcpy.c \
-		../C2_s21_stringplus-0/src/s21_memmove.c \
-		../C2_s21_stringplus-0/src/s21_memset.c \
-		../C2_s21_stringplus-0/src/s21_strcat.c \
-		../C2_s21_stringplus-0/src/s21_strchr.c \
-		../C2_s21_stringplus-0/src/s21_strcmp.c \
-		../C2_s21_stringplus-0/src/s21_strncmp.c \
-		../C2_s21_stringplus-0/src/s21_strcpy.c \
-		../C2_s21_stringplus-0/src/s21_strcspn.c \
-		../C2_s21_stringplus-0/src/s21_strerror.c \
-		../C2_s21_stringplus-0/src/s21_strlen.c \
-		../C2_s21_stringplus-0/src/s21_strncat.c \
-		../C2_s21_stringplus-0/src/s21_strncpy.c \
-		../C2_s21_stringplus-0/src/s21_strpbrk.c \
-		../C2_s21_stringplus-0/src/s21_strrchr.c \
-		../C2_s21_stringplus-0/src/s21_strspn.c \
-		../C2_s21_stringplus-0/src/s21_strstr.c \
-		../C2_s21_stringplus-0/src/s21_strtok.c \
-		../C2_s21_stringplus-0/src/s21_to_upper.c \
-		../C2_s21_stringplus-0/src/s21_to_lower.c \
-		../C2_s21_stringplus-0/src/s21_insert.c \
-		../C2_s21_stringplus-0/src/s21_trim.c \
-		../C2_s21_stringplus-0/src/s21_sprintf.c
+SRCS =  ../s21_memchr.c \
+		../s21_memcmp.c \
+		../s21_memcpy.c \
+		../s21_memmove.c \
+		../s21_memset.c \
+		../s21_strcat.c \
+		../s21_strchr.c \
+		../s21_strcmp.c \
+		../s21_strncmp.c \
+		../s21_strcpy.c \
+		../s21_strcspn.c \
+		../s21_strerror.c \
+		../s21_strlen.c \
+		../s21_strncat.c \
+		../s21_strncpy.c \
+		../s21_strpbrk.c \
+		../s21_strrchr.c \
+		../s21_strspn.c \
+		../s21_strstr.c \
+		../s21_strtok.c \
+		../s21_to_upper.c \
+		../s21_to_lower.c \
+		../s21_insert.c \
+		../s21_trim.c \
+		../s21_sprintf.c
 OBJS = $(SRCS:.c=.o) s21_string_tests.o
 OBJST = $(SRCS:.c=.o)
 NAME = test
