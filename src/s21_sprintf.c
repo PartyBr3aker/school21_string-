@@ -82,6 +82,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, long)
                                  : va_arg(argument_list, int);
+                    number = (width & H_LENGH_FLAG) ? (short)number : number;
                     num_of_printed_char = IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
@@ -91,6 +92,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, unsigned long)
                                  : va_arg(argument_list, unsigned int);
+                    number = (width & H_LENGH_FLAG) ? (unsigned short)number : number;
                     num_of_printed_char = IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
@@ -266,8 +268,8 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
-    precision = precision == -1 ? 0 : precision - 1;
-    int length = GetNumberLength(number, radix) + precision +
+    precision = precision == -1 ? 0 : precision;
+    int length = GetNumberLength(number, radix) +
                  (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
     width = (width > precision) ? width : precision;
