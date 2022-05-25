@@ -60,16 +60,16 @@ int s21_sprintf(char *str, const char *format, ...) {
             switch (specificator) {
                 case C:
                     symbol = (char)va_arg(argument_list, int);
-                    num_of_printed_char = CharToString(&str, symbol, flags, width);
+                    num_of_printed_char += CharToString(&str, symbol, flags, width);
                     break;
                 case F:
                     double_number = va_arg(argument_list, double);
-                    DoubleToString(&str, double_number, flags, width,
+                    num_of_printed_char += DoubleToString(&str, double_number, flags, width,
                                    precision);
                     break;
                 case S:
                     string_for_print = va_arg(argument_list, char *);
-                    num_of_printed_char = StringToString(&str, string_for_print, flags, width,
+                    num_of_printed_char += StringToString(&str, string_for_print, flags, width,
                                    precision);
                     break;
                 case PERCENT:
@@ -83,7 +83,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                                  ? va_arg(argument_list, long)
                                  : va_arg(argument_list, int);
                     number = (width & H_LENGH_FLAG) ? (short)number : number;
-                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 case U:
@@ -93,7 +93,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                                  ? va_arg(argument_list, unsigned long)
                                  : va_arg(argument_list, unsigned int);
                     number = (width & H_LENGH_FLAG) ? (unsigned short)number : number;
-                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 case D:
@@ -101,7 +101,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                              : (width & L_LENGH_FLAG)
                                  ? va_arg(argument_list, long)
                                  : va_arg(argument_list, int);
-                    num_of_printed_char = IntToString(&str, (long long)number, flags, width,
+                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
                                 precision, 10);
                     break;
                 default:
@@ -268,9 +268,8 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
-    precision = precision == -1 ? 0 : precision;
     int length = GetNumberLength(number, radix) +
-                 (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
+                 (number < 0 || flags & PLUS_FLAG || (flags & SPACE_FLAG && precision < width));
     width = (length >= width) ? length : width;
     width = (width > precision) ? width : precision;
     char *string = *string_pointer;
@@ -280,18 +279,28 @@ int IntToString(char **string_pointer, long long int number, int flags,
         (flags & MINUS_FLAG) ? (string + length) : (string + width);
     end_of_number--;
     char *precision_end = end_of_number;
-    for (; precision; precision--, precision_end--) {
+    int old_precision = precision;
+    if (precision != -1) {
+        for (; precision; precision--, precision_end--) {
         *precision_end = '0';
+        }
     }
-
-    for (; abs_number > 0; abs_number /= radix, end_of_number--) {
-        *end_of_number = abs_number % radix + '0';
+    if (number) {
+        for (; abs_number > 0; abs_number /= radix, end_of_number--) {
+             *end_of_number = abs_number % radix + '0';
+        }
+    } else if (old_precision) {
+         *end_of_number = '0';
+         end_of_number--;
+    } else {
+        width = 0;
     }
+    
 
     if (flags & PLUS_FLAG) {
         *end_of_number = number >= 0 ? '+' : '-';
         end_of_number--;
-    } else if (flags & SPACE_FLAG) {
+    } else if (flags & SPACE_FLAG && precision < length) {
         *end_of_number = number >= 0 ? ' ' : '-';
         end_of_number--;
     } else if (number < 0) {
@@ -311,8 +320,11 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     int i = precision;  // i - Счетчик оставшихся знаков после запятой
     int j = 0;          // j - Позиция в выходной строке
     long double abs_number = number >= 0 ? number : -number;
-    s21_size_t int_length =
-        GetNumberLength(abs_number, 10);  // Длина целой части
+    s21_size_t int_length = 1;  // Длина целой части
+    if (abs_number >= 1) {
+        int_length =
+        GetNumberLength(abs_number, 10); 
+    }
     s21_size_t length =
         int_length + precision +
         (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG) +
@@ -354,7 +366,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
         i--;
         j++;
         if (i == precision && i != 0) {
-            string[j] = '.';
+            string[j] = ',';
             j++;
         }
     }
@@ -365,7 +377,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
 
 int GetNumberLength(long long number, int radix) {
     number = number < 0 ? -number : number;
-    return (int)(log(number) / log(radix)) + 1;
+    return number ? (int)(log(number) / log(radix)) + 1 : 1;
 }
 
 int StringToString(char **string_pointer, char *string_input, int flags,
