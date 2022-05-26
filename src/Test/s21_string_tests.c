@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <wchar.h>
-#include "../C2_s21_stringplus-0/src/s21_string.h"
+#include "../s21_string.h"
 
 #define BUFF_SIZE 512
 
