@@ -78,29 +78,26 @@ int s21_sprintf(char *str, const char *format, ...) {
                     num_of_printed_char++;
                     break;
                 case I:
-                    // number =  (long long int)va_arg(argument_list, long long int);
-                    // num_of_printed_char += IntToString(&str, (long long)number, flags, width,
-                    //             precision, 10);
-                    number = (width & H_LENGH_FLAG) ? va_arg(argument_list, long long int)
-                             : (width & L_LENGH_FLAG)
-                                 ? va_arg(argument_list, long)
-                                 : va_arg(argument_list, int);
-                    //number = (width & H_LENGH_FLAG) ? (short)number : number;
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    number = va_arg(argument_list, long);
+                    number = (length & H_LENGH_FLAG) ? (short)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 case U:
                     if (flags & SPACE_FLAG) flags = flags - SPACE_FLAG;
-                    number = va_arg(argument_list, long long int);
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    if (flags & PLUS_FLAG) flags = flags - PLUS_FLAG;
+                    number = va_arg(argument_list, long unsigned int);
+                    number = (length & H_LENGH_FLAG) ? (short unsigned int)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (unsigned int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 case D:
-                    number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int)
-                             : (width & L_LENGH_FLAG)
-                                 ? va_arg(argument_list, long)
-                                 : va_arg(argument_list, int);
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    number = va_arg(argument_list, long);
+                    number = (length & H_LENGH_FLAG) ? (short)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 default:
@@ -170,9 +167,10 @@ int GetWidth(const char **format_pointer, int *width) {
     while (status == SUCCEED && IsDigit(*format)) {
         _width *= 10;
         _width += *format - '0';
-        format++;
-        if (_width + *format - '0' > INT_MAX) {
+        if (_width > INT_MAX) {
             status = ERROR;
+        } else {
+            format++;
         }
     }
     if (status == SUCCEED) {
@@ -267,19 +265,17 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
-                    printf("num %Ld\n", number);
     int old_precision = precision;
     precision = precision == -1 ? 0 : precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     int length = GetNumberLength(number, radix) +
                  (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
     width = (width > precision) ? width : precision;
-    
     char *string = *string_pointer;
     s21_memset(string, ' ', width);
     long long int abs_number = number >= 0 ? number : -number;
     char *end_of_number =
-        (flags & MINUS_FLAG) ? (string + length) : (string + width);
+        (flags & MINUS_FLAG) ? (length > precision) ? (string + length) : (string + precision) : (string + width);
     end_of_number--;
     char *end_of_symbol = (length > precision) ? (end_of_number + 1 - length) : (end_of_number + 1 - precision);
     char *precision_end = end_of_number;
@@ -309,7 +305,6 @@ int IntToString(char **string_pointer, long long int number, int flags,
 
 int DoubleToString(char **string_pointer, double number, int flags, int width,
                    int precision) {
-                       printf("abs %lf\n", number);
     char *string = *string_pointer;
     int temp = 0;
     precision = (precision == -1) ? 6 : precision;
@@ -365,6 +360,12 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
             string[j] = '.';
             j++;
         }
+    }
+    // Запись конечных пробелов, если флаг минус
+    while (width > 0) {
+        string[j] = ' ';
+        j++;
+        width--;
     }
     string[j] = '\0';
     *string_pointer += j;

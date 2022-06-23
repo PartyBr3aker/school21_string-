@@ -6,8 +6,8 @@
 int main() {
     char str1[500];
     char str2[500];
-    char format[] = "%1.1f";
-    double val = 10.5;
+    char *format = "% f";
+    float val = 0;
 
     int num1 = s21_sprintf(str1, format, val);
     int num2 = sprintf(str2, format, val);
