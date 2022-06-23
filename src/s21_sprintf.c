@@ -275,9 +275,11 @@ int IntToString(char **string_pointer, long long int number, int flags,
     s21_memset(string, ' ', width);
     long long int abs_number = number >= 0 ? number : -number;
     char *end_of_number =
-        (flags & MINUS_FLAG) ? (length > precision) ? (string + length) : (string + precision) : (string + width);
+        (flags & MINUS_FLAG) ? (length > precision) ? (string + length) :
+                                        (string + precision) : (string + width);
     end_of_number--;
-    char *end_of_symbol = (length > precision) ? (end_of_number + 1 - length) : (end_of_number + 1 - precision);
+    char *end_of_symbol = (length > precision) ? (end_of_number + 1 - length) :
+                                                (end_of_number + 1 - precision);
     char *precision_end = end_of_number;
     for (; precision; precision--, precision_end--) {
         *precision_end = '0';
@@ -297,7 +299,7 @@ int IntToString(char **string_pointer, long long int number, int flags,
             *end_of_number = abs_number % radix + '0';
         }
     }
-    
+
     width = (number == 0 && precision == 0 && (flags & SPACE_FLAG) == 0 && old_precision == 0) ? 0 : width;
     *string_pointer += width;
     return width;
@@ -314,7 +316,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     s21_size_t int_length = 1;  // Длина целой части
     if (abs_number >= 1) {
         int_length =
-        GetNumberLength(abs_number, 10); 
+        GetNumberLength(abs_number, 10);
     }
     s21_size_t length =
         int_length + precision +
