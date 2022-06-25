@@ -719,85 +719,121 @@ END_TEST
 
 // 21 функция to_upper. 1й тест
 START_TEST(s21_to_upper_test_1) {
-    ck_assert_pstr_eq(s21_to_upper("QwErTy"), "QWERTY");
+    char* res = s21_to_upper("QwErTy");
+    ck_assert_pstr_eq(res, "QWERTY");
+    free(res);
 }
 END_TEST
 
 // 21 функция to_upper. 2й тест
 START_TEST(s21_to_upper_test_2) {
-    ck_assert_pstr_eq(s21_to_upper("Hello world\n\0"), "HELLO WORLD\n\0");
+    char* res = s21_to_upper("Hello world\n\0");
+    ck_assert_pstr_eq(res, "HELLO WORLD\n\0");
+    free(res);
 }
 END_TEST
 
 // 21 функция to_upper. 3й тест
 START_TEST(s21_to_upper_test_3) {
-    ck_assert_pstr_eq(s21_to_upper("a\n\0"), "A\n\0");
+    char* res = s21_to_upper("a\n\0");
+    ck_assert_pstr_eq(res, "A\n\0");
+    free(res);
 }
 END_TEST
 
 // 21 функция to_upper. 4й тест
 START_TEST(s21_to_upper_test_4) {
-    ck_assert_pstr_eq(s21_to_upper(" \n\0"), " \n\0");
+    char* res = s21_to_upper(" \n\0");
+    ck_assert_pstr_eq(res, " \n\0");
+    free(res);
 }
 END_TEST
 
 // 21 функция to_upper. 5й тест
-START_TEST(s21_to_upper_test_5) { ck_assert_pstr_eq(s21_to_upper("\0"), "\0"); }
+START_TEST(s21_to_upper_test_5) {
+    char* res = s21_to_upper("\0");
+    ck_assert_pstr_eq(res, "\0");
+    free(res);
+}
 END_TEST
 
 // 22 функция to_lower. 1й тест
 START_TEST(s21_to_lower_test_1) {
-    ck_assert_pstr_eq(s21_to_lower("QwErTy"), "qwerty");
+    char* res = s21_to_lower("QwErTy");
+    ck_assert_pstr_eq(res, "qwerty");
+    free(res);
 }
 END_TEST
 
 // 22 функция to_lower. 2й тест
 START_TEST(s21_to_lower_test_2) {
-    ck_assert_pstr_eq(s21_to_lower("Hello world\n\0"), "hello world\n\0");
+    char* res = s21_to_lower("Hello world\n\0");
+    ck_assert_pstr_eq(res, "hello world\n\0");
+    free(res);
 }
 END_TEST
 
 // 22 функция to_lower. 3й тест
 START_TEST(s21_to_lower_test_3) {
-    ck_assert_pstr_eq(s21_to_lower("a\n\0"), "a\n\0");
+    char* res = s21_to_lower("a\n\0");
+    ck_assert_pstr_eq(res, "a\n\0");
+    free(res);
 }
 END_TEST
 
 // 22 функция to_lower. 4й тест
 START_TEST(s21_to_lower_test_4) {
-    ck_assert_pstr_eq(s21_to_lower(" \n\0"), " \n\0");
+    char* res = s21_to_lower(" \n\0");
+    ck_assert_pstr_eq(res, " \n\0");
+    free(res);
 }
 END_TEST
 
 // 22 функция to_lower. 5й тест
-START_TEST(s21_to_lower_test_5) { ck_assert_pstr_eq(s21_to_lower("\0"), "\0"); }
+START_TEST(s21_to_lower_test_5) {
+    char* res = s21_to_lower("\0");
+    ck_assert_pstr_eq(res, "\0");
+    free(res);
+}
 END_TEST
 
 // 23 функция insert. 1й тест
 START_TEST(s21_insert_test_1) {
-    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "He123llo");
+    char* res = s21_insert("Hello", "123", 2);
+    ck_assert_pstr_eq(res, "He123llo");
+    free(res);
 }
 END_TEST
 
 // 23 функция insert. 2й тест
 START_TEST(s21_insert_test_2) {
-    ck_assert_pstr_eq(s21_insert("", "Hello world\n", 1), S21_NULL);
+    char* res = s21_insert("", "Hello world\n", 1);
+    ck_assert_pstr_eq(res, S21_NULL);
+    free(res);
 }
 END_TEST
 
 // 23 функция insert. 3й тест
-START_TEST(s21_insert_test_3) { ck_assert_pstr_eq(s21_insert("", "", 1), S21_NULL); }
+START_TEST(s21_insert_test_3) {
+    char* res = s21_insert("", "", 1);
+    ck_assert_pstr_eq(res, S21_NULL);
+    free(res);
+}
 END_TEST
 
 // 23 функция insert. 4й тест
 START_TEST(s21_insert_test_4) {
-    ck_assert_pstr_eq(s21_insert("Hello", "123", 0), "123Hello");
+    char* res = s21_insert("Hello", "123", 0);
+    ck_assert_pstr_eq(res, "123Hello");
+    free(res);
 }
 END_TEST
 
 // 23 функция insert. 5й тест
 START_TEST(s21_insert_test_5) {
-    ck_assert_pstr_eq(s21_insert("Hello", " \n", 2), "He \nllo");
+    char* res = s21_insert("Hello", " \n", 2);
+    ck_assert_pstr_eq(res, "He \nllo");
+    free(res);
 }
 END_TEST
 
