@@ -265,6 +265,7 @@ void ErrorToString(int errnum) {
     int errnum_length = GetNumberLenght(errnum);
     int i = start_index + errnum_length - 1;
     int negative_flag = errnum < 0;
+    s21_memset(unknown_error + start_index, 0 , 130);
 
     if (negative_flag) {
         unknown_error[start_index] = '-';
