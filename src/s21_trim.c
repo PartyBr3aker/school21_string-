@@ -6,7 +6,7 @@ void *s21_trim(const char *src, const char *trim_chars) {
     if (trim_chars) {
         if (*trim_chars) {
             chars = trim_chars;
-        } 
+        }
     }
     s21_size_t length_src = 0;
     if (src) length_src = s21_strlen(src);

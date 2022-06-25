@@ -78,30 +78,26 @@ int s21_sprintf(char *str, const char *format, ...) {
                     num_of_printed_char++;
                     break;
                 case I:
-                    number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int)
-                             : (width & L_LENGH_FLAG)
-                                 ? va_arg(argument_list, long)
-                                 : va_arg(argument_list, int);
-                    number = (width & H_LENGH_FLAG) ? (short)number : number;
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    number = va_arg(argument_list, long);
+                    number = (length & H_LENGH_FLAG) ? (short)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 case U:
-                    number = (width & H_LENGH_FLAG)
-                                 ? va_arg(argument_list, unsigned int)
-                             : (width & L_LENGH_FLAG)
-                                 ? va_arg(argument_list, unsigned long)
-                                 : va_arg(argument_list, unsigned int);
-                    number = (width & H_LENGH_FLAG) ? (unsigned short)number : number;
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    if (flags & SPACE_FLAG) flags = flags - SPACE_FLAG;
+                    if (flags & PLUS_FLAG) flags = flags - PLUS_FLAG;
+                    number = va_arg(argument_list, long unsigned int);
+                    number = (length & H_LENGH_FLAG) ? (short unsigned int)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (unsigned int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 case D:
-                    number = (width & H_LENGH_FLAG) ? va_arg(argument_list, int)
-                             : (width & L_LENGH_FLAG)
-                                 ? va_arg(argument_list, long)
-                                 : va_arg(argument_list, int);
-                    num_of_printed_char += IntToString(&str, (long long)number, flags, width,
+                    number = va_arg(argument_list, long);
+                    number = (length & H_LENGH_FLAG) ? (short)number : number;
+                    number = (length & L_LENGH_FLAG) ? number : (int)number;
+                    num_of_printed_char += IntToString(&str, number, flags, width,
                                 precision, 10);
                     break;
                 default:
@@ -171,9 +167,10 @@ int GetWidth(const char **format_pointer, int *width) {
     while (status == SUCCEED && IsDigit(*format)) {
         _width *= 10;
         _width += *format - '0';
-        format++;
-        if (_width + *format - '0' > INT_MAX) {
+        if (_width > INT_MAX) {
             status = ERROR;
+        } else {
+            format++;
         }
     }
     if (status == SUCCEED) {
@@ -268,46 +265,42 @@ int IsSpecificator(char c) {
 
 int IntToString(char **string_pointer, long long int number, int flags,
                 int width, int precision, int radix) {
+    int old_precision = precision;
+    precision = precision == -1 ? 0 : precision + (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     int length = GetNumberLength(number, radix) +
-                 (number < 0 || flags & PLUS_FLAG || (flags & SPACE_FLAG && precision < width));
+                 (number < 0 || flags & PLUS_FLAG || flags & SPACE_FLAG);
     width = (length >= width) ? length : width;
     width = (width > precision) ? width : precision;
     char *string = *string_pointer;
     s21_memset(string, ' ', width);
     long long int abs_number = number >= 0 ? number : -number;
     char *end_of_number =
-        (flags & MINUS_FLAG) ? (string + length) : (string + width);
+        (flags & MINUS_FLAG) ? (length > precision) ? (string + length) :
+                                        (string + precision) : (string + width);
     end_of_number--;
+    char *end_of_symbol = (length > precision) ? (end_of_number + 1 - length) :
+                                                (end_of_number + 1 - precision);
     char *precision_end = end_of_number;
-    int old_precision = precision;
-    if (precision != -1) {
-        for (; precision; precision--, precision_end--) {
+    for (; precision; precision--, precision_end--) {
         *precision_end = '0';
-        }
     }
-    if (number) {
-        for (; abs_number > 0; abs_number /= radix, end_of_number--) {
-             *end_of_number = abs_number % radix + '0';
-        }
-    } else if (old_precision) {
-         *end_of_number = '0';
-         end_of_number--;
-    } else {
-        width = 0;
-    }
-    
 
     if (flags & PLUS_FLAG) {
-        *end_of_number = number >= 0 ? '+' : '-';
-        end_of_number--;
-    } else if (flags & SPACE_FLAG && precision < length) {
-        *end_of_number = number >= 0 ? ' ' : '-';
-        end_of_number--;
+        *end_of_symbol = number >= 0 ? '+' : '-';
+    } else if (flags & SPACE_FLAG) {
+        *end_of_symbol = number >= 0 ? ' ' : '-';
     } else if (number < 0) {
-        *end_of_number = '-';
-        end_of_number--;
+        *end_of_symbol = '-';
+    }
+    if (!abs_number) {
+        *end_of_number = '0';
+    } else {
+        for (; abs_number > 0; abs_number /= radix, end_of_number--) {
+            *end_of_number = abs_number % radix + '0';
+        }
     }
 
+    width = (number == 0 && precision == 0 && (flags & SPACE_FLAG) == 0 && old_precision == 0) ? 0 : width;
     *string_pointer += width;
     return width;
 }
@@ -323,7 +316,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     s21_size_t int_length = 1;  // Длина целой части
     if (abs_number >= 1) {
         int_length =
-        GetNumberLength(abs_number, 10); 
+        GetNumberLength(abs_number, 10);
     }
     s21_size_t length =
         int_length + precision +
@@ -361,14 +354,20 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
     }
     // Запись числа
     while (i > 0) {
-        temp = fmod(abs_number / (powl(10, i - 1)), 10);  // Выделение цифры
+        temp = fmodl(abs_number / (powl(10, i - 1)), 10);  // Выделение цифры
         string[j] = temp + '0';  // Запись цифры
         i--;
         j++;
         if (i == precision && i != 0) {
-            string[j] = ',';
+            string[j] = '.';
             j++;
         }
+    }
+    // Запись конечных пробелов, если флаг минус
+    while (width > 0) {
+        string[j] = ' ';
+        j++;
+        width--;
     }
     string[j] = '\0';
     *string_pointer += j;
@@ -377,7 +376,7 @@ int DoubleToString(char **string_pointer, double number, int flags, int width,
 
 int GetNumberLength(long long number, int radix) {
     number = number < 0 ? -number : number;
-    return number ? (int)(log(number) / log(radix)) + 1 : 1;
+    return (number >= 1) ? (int)(log(number) / log(radix)) + 1 : 1;
 }
 
 int StringToString(char **string_pointer, char *string_input, int flags,

@@ -775,29 +775,29 @@ END_TEST
 
 // 23 функция insert. 1й тест
 START_TEST(s21_insert_test_1) {
-    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "H123ello");
+    ck_assert_pstr_eq(s21_insert("Hello", "123", 2), "He123llo");
 }
 END_TEST
 
 // 23 функция insert. 2й тест
 START_TEST(s21_insert_test_2) {
-    ck_assert_pstr_eq(s21_insert("", "Hello world\n", 1), "Hello world\n");
+    ck_assert_pstr_eq(s21_insert("", "Hello world\n", 1), S21_NULL);
 }
 END_TEST
 
 // 23 функция insert. 3й тест
-START_TEST(s21_insert_test_3) { ck_assert_pstr_eq(s21_insert("", "", 1), ""); }
+START_TEST(s21_insert_test_3) { ck_assert_pstr_eq(s21_insert("", "", 1), S21_NULL); }
 END_TEST
 
 // 23 функция insert. 4й тест
 START_TEST(s21_insert_test_4) {
-    ck_assert_pstr_eq(s21_insert("Hello", "123", 0), "Hello");
+    ck_assert_pstr_eq(s21_insert("Hello", "123", 0), "123Hello");
 }
 END_TEST
 
 // 23 функция insert. 5й тест
 START_TEST(s21_insert_test_5) {
-    ck_assert_pstr_eq(s21_insert("Hello", " \n", 2), "H \nello");
+    ck_assert_pstr_eq(s21_insert("Hello", " \n", 2), "He \nllo");
 }
 END_TEST
 
